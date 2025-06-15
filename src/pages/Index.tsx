@@ -18,12 +18,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
-      {/* Subtle background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-48 h-48 bg-slate-400/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
-      </div>
-      
       {/* Main container */}
       <div className="relative w-full max-w-sm mx-auto">
         <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
