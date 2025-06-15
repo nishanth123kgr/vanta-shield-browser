@@ -1,23 +1,17 @@
-
 import { Shield, AlertTriangle, ArrowLeft, ExternalLink, Clock, Globe, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
 const Index = () => {
   const handleGoBack = () => {
     window.history.back();
   };
-
   const handleVisitHalonex = () => {
     window.open('https://halonex.app', '_blank');
   };
-
   const handleReportSafe = () => {
     console.log("Reporting site as safe");
   };
-
-  return (
-    <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
+  return <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
       {/* Main container */}
       <div className="relative w-full max-w-2xl mx-auto">
         <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-t-2xl">
@@ -43,10 +37,7 @@ const Index = () => {
                 </p>
               </div>
 
-              <div className="flex items-center justify-center gap-2 text-white/60 text-base">
-                <Clock className="h-5 w-5" />
-                <span>Blocked {new Date().toLocaleTimeString()}</span>
-              </div>
+              
             </div>
 
             {/* Main warning */}
@@ -88,11 +79,7 @@ const Index = () => {
 
             {/* Action buttons */}
             <div className="space-y-4 mb-6">
-              <Button
-                onClick={handleGoBack}
-                size="lg"
-                className="w-full bg-blue-600/80 backdrop-blur-sm border border-blue-500/50 hover:bg-blue-600 text-white rounded-lg font-medium text-lg py-4"
-              >
+              <Button onClick={handleGoBack} size="lg" className="w-full bg-blue-600/80 backdrop-blur-sm border border-blue-500/50 hover:bg-blue-600 text-white rounded-lg font-medium text-lg py-4">
                 <ArrowLeft className="h-6 w-6 mr-2" />
                 Go Back Safely
               </Button>
@@ -115,8 +102,6 @@ const Index = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
