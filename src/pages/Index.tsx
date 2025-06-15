@@ -20,9 +20,9 @@ const Index = () => {
     <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
       {/* Main container */}
       <div className="relative w-full max-w-2xl mx-auto">
-        <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
+        <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-t-2xl">
           {/* Warning accent bar */}
-          <div className="h-1.5 bg-gradient-to-r from-orange-400 to-red-500"></div>
+          <div className="h-1.5 bg-gradient-to-r from-orange-400 to-red-500 rounded-t-2xl"></div>
           
           <CardContent className="p-10">
             {/* Header */}
