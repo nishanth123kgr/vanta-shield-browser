@@ -80,7 +80,7 @@ const Index = () => {
                   <Lock className="h-5 w-5 text-green-300" />
                   <div>
                     <p className="font-medium text-white text-base">Protected</p>
-                    <p className="text-base text-white/70">By Halonex</p>
+                    <p className="text-base text-white/70">By Halonex Vanta</p>
                   </div>
                 </div>
               </div>
@@ -96,16 +96,7 @@ const Index = () => {
                 <ArrowLeft className="h-6 w-6 mr-2" />
                 Go Back Safely
               </Button>
-              
-              <Button
-                onClick={handleVisitHalonex}
-                variant="outline"
-                size="sm"
-                className="w-full bg-white/10 backdrop-blur-sm border border-white/30 text-white hover:bg-white/20 rounded-lg font-medium text-base py-3"
-              >
-                Learn More
-                <ExternalLink className="h-5 w-5 ml-2" />
-              </Button>
+              {/* "Learn More" button has been removed as per user request */}
             </div>
 
             {/* Footer */}
@@ -113,15 +104,13 @@ const Index = () => {
               <div className="flex items-center justify-center mb-4">
                 <Shield className="h-5 w-5 text-blue-300 mr-2" />
                 <span className="text-white/90 text-base">
-                  Protected by <span className="font-semibold">Halonex</span>
+                  Protected by <span className="font-semibold">Halonex Vanta</span>
                 </span>
               </div>
-              <button
-                onClick={handleVisitHalonex}
-                className="text-blue-300 hover:text-blue-200 text-base transition-colors hover:underline"
-              >
-                Visit halonex.app →
-              </button>
+              {/* Call-to-action made subtle; no direct company link per user request */}
+              <span className="text-blue-300 text-base italic">
+                Discover more about next-gen security at <span className="font-semibold">Halonex Vanta</span>
+              </span>
             </div>
           </CardContent>
         </Card>
