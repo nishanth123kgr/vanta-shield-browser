@@ -19,17 +19,19 @@ const Index = () => {
       {/* Main container */}
       <div className="relative w-full max-w-2xl mx-auto">
         {/* 
-          Instead of a separate top gradient bar, 
-          wrap the Card in a div with a gradient border-top effect, while preserving rounded corners.
+          Add a gradient border only to the top edge, 
+          but use the same border radius on all corners for uniformity.
         */}
-        <div className="rounded-t-2xl overflow-hidden" style={{position: "relative"}}>
+        <div className="relative">
+          {/* Gradient border-top */}
           <div
-            className="absolute left-0 top-0 w-full h-2 pointer-events-none z-10"
+            className="absolute left-0 top-0 w-full h-2 rounded-t-2xl"
             style={{
               background: "linear-gradient(to right, #fb923c, #ef4444)",
+              zIndex: 1,
             }}
           />
-          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-t-2xl pt-2">
+          <Card className="relative bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl pt-2 overflow-hidden">
             <CardContent className="p-10">
               {/* Header */}
               <div className="text-center mb-8">
@@ -93,7 +95,6 @@ const Index = () => {
                   <ArrowLeft className="h-6 w-6 mr-2" />
                   Go Back Safely
                 </Button>
-                {/* "Learn More" button has been removed as per user request */}
               </div>
 
               {/* Footer */}
@@ -117,3 +118,4 @@ const Index = () => {
   );
 };
 export default Index;
+
