@@ -13,101 +13,116 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%220%200%2040%2040%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.02%22%3E%3Cpath%20d%3D%22m20%2020%2020%2020-20-20Z%22/%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center p-4">
+      {/* Modern geometric background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-20 w-32 h-32 bg-red-500 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-32 right-16 w-48 h-48 bg-red-600 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-red-400 rounded-full blur-2xl animate-pulse delay-500"></div>
+      </div>
       
-      <Card className="relative w-full max-w-2xl bg-white/95 backdrop-blur-sm border-0 shadow-2xl animate-fade-in">
-        <CardContent className="p-8 text-center">
-          {/* Header with Shield Icon */}
-          <div className="flex justify-center mb-6">
+      <Card className="relative w-full max-w-3xl bg-white/80 backdrop-blur-xl border border-gray-200/50 shadow-2xl shadow-red-500/10 animate-fade-in overflow-hidden">
+        {/* Premium red accent bar */}
+        <div className="h-1 bg-gradient-to-r from-red-500 via-red-600 to-red-500"></div>
+        
+        <CardContent className="p-10 text-center">
+          {/* Modern shield icon with premium styling */}
+          <div className="flex justify-center mb-8">
             <div className="relative">
-              <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl animate-pulse"></div>
-              <div className="relative bg-red-500 p-4 rounded-full">
-                <Shield className="h-12 w-12 text-white" />
+              <div className="absolute inset-0 bg-red-500/20 rounded-2xl blur-xl scale-110 animate-pulse"></div>
+              <div className="relative bg-gradient-to-br from-red-500 to-red-600 p-6 rounded-2xl shadow-lg shadow-red-500/25">
+                <Shield className="h-16 w-16 text-white" strokeWidth={1.5} />
               </div>
             </div>
           </div>
 
-          {/* Main Heading */}
-          <h1 className="text-4xl font-bold text-slate-900 mb-4">
-            Site Blocked
+          {/* Modern typography */}
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-3">
+            Access Blocked
           </h1>
           
-          {/* Warning Message */}
-          <div className="flex items-center justify-center mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-            <AlertTriangle className="h-5 w-5 text-amber-600 mr-2 flex-shrink-0" />
-            <p className="text-amber-800 font-medium">
-              This website has been identified as a potential phishing site
+          <p className="text-red-500 font-semibold text-lg mb-8 tracking-wide">
+            SECURITY PROTECTION ACTIVE
+          </p>
+          
+          {/* Premium warning box */}
+          <div className="flex items-center justify-center mb-8 p-6 bg-gradient-to-r from-red-50 to-red-50/80 border border-red-200 rounded-2xl shadow-sm">
+            <div className="flex items-center justify-center w-8 h-8 bg-red-500 rounded-full mr-4 flex-shrink-0">
+              <AlertTriangle className="h-5 w-5 text-white" strokeWidth={2} />
+            </div>
+            <p className="text-red-900 font-medium text-lg">
+              This website has been identified as a potential phishing threat
             </p>
           </div>
 
-          {/* Description */}
-          <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-            <strong>Halonex Vanta</strong> has blocked access to this website to protect you from potential security threats. 
-            Phishing sites attempt to steal your personal information, passwords, or financial details.
+          {/* Modern description */}
+          <p className="text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+            <span className="font-bold text-gray-900">Halonex Vanta</span> has automatically blocked access to this website to protect your personal information and digital security from malicious threats.
           </p>
 
-          {/* Info Section */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-left">
-            <h3 className="font-semibold text-blue-900 mb-3">Why was this site blocked?</h3>
-            <ul className="text-blue-800 space-y-2 text-sm">
-              <li className="flex items-start">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                The site may be impersonating a legitimate service
-              </li>
-              <li className="flex items-start">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                It could be attempting to steal your personal information
-              </li>
-              <li className="flex items-start">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                The domain appears in our security threat database
-              </li>
-            </ul>
+          {/* Premium info section */}
+          <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl p-8 mb-10 text-left shadow-sm">
+            <h3 className="font-bold text-gray-900 mb-6 text-xl flex items-center">
+              <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+              Security Analysis
+            </h3>
+            <div className="grid gap-4">
+              <div className="flex items-start">
+                <div className="w-2 h-2 bg-red-500 rounded-full mt-3 mr-4 flex-shrink-0"></div>
+                <span className="text-gray-700 text-lg">Domain detected in threat intelligence database</span>
+              </div>
+              <div className="flex items-start">
+                <div className="w-2 h-2 bg-red-500 rounded-full mt-3 mr-4 flex-shrink-0"></div>
+                <span className="text-gray-700 text-lg">Suspicious patterns indicating credential harvesting</span>
+              </div>
+              <div className="flex items-start">
+                <div className="w-2 h-2 bg-red-500 rounded-full mt-3 mr-4 flex-shrink-0"></div>
+                <span className="text-gray-700 text-lg">Potential impersonation of legitimate services</span>
+              </div>
+            </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Premium action buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <Button
               onClick={handleGoBack}
-              variant="default"
               size="lg"
-              className="bg-slate-700 hover:bg-slate-800 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105"
+              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/25"
             >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Go Back to Safety
+              <ArrowLeft className="h-6 w-6 mr-3" strokeWidth={2} />
+              Return to Safety
             </Button>
             
             <Button
               onClick={handleVisitHalonex}
               variant="outline"
               size="lg"
-              className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 hover:scale-105"
+              className="border-2 border-red-500 text-red-600 hover:bg-red-500 hover:text-white px-10 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
               Learn More
-              <ExternalLink className="h-5 w-5 ml-2" />
+              <ExternalLink className="h-6 w-6 ml-3" strokeWidth={2} />
             </Button>
           </div>
 
-          {/* Footer */}
-          <div className="mt-8 pt-6 border-t border-slate-200">
-            <p className="text-sm text-slate-500 mb-2">
-              Protected by <strong className="text-slate-700">Halonex Vanta</strong>
-            </p>
+          {/* Premium footer */}
+          <div className="pt-8 border-t border-gray-200">
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center mr-3">
+                <Shield className="h-4 w-4 text-white" strokeWidth={2} />
+              </div>
+              <span className="text-gray-600 text-lg">
+                Protected by <span className="font-bold text-gray-900">Halonex Vanta</span>
+              </span>
+            </div>
             <button
               onClick={handleVisitHalonex}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-200 hover:underline"
+              className="text-red-500 hover:text-red-600 font-semibold transition-colors duration-200 hover:underline underline-offset-4"
             >
-              Visit halonex.app
+              Visit halonex.app →
             </button>
           </div>
         </CardContent>
       </Card>
-
-      {/* Background Elements */}
-      <div className="absolute top-10 left-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-10 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl"></div>
-      <div className="absolute top-1/2 left-0 w-16 h-16 bg-red-500/10 rounded-full blur-xl"></div>
     </div>
   );
 };
