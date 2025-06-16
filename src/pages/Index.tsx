@@ -19,12 +19,11 @@ const Index = () => {
       {/* Main container */}
       <div className="relative w-full max-w-2xl mx-auto">
         <Card 
-          className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-lg overflow-hidden"
-          style={{
-            borderTop: "3px solid",
-            borderImage: "linear-gradient(to right, #fb923c, #ef4444) 1",
-          }}
+          className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-lg overflow-hidden relative"
         >
+          {/* Gradient border top */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 to-red-500 rounded-t-lg"></div>
+          
           <CardContent className="p-10">
             {/* Header */}
             <div className="text-center mb-8">
