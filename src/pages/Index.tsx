@@ -36,6 +36,13 @@ const Index = () => {
               <h1 className="text-4xl font-bold text-white mb-4">
                 Site Blocked
               </h1>
+
+              {/* Blocked domain display */}
+              <div className="bg-red-500/20 backdrop-blur-sm border border-red-400/30 rounded-lg px-4 py-3 mb-4">
+                <p className="text-red-300 font-mono text-lg break-all">
+                  suspicious-banking-site.com
+                </p>
+              </div>
               
               <div className="inline-block bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 px-5 py-2.5 rounded-full mb-4">
                 <p className="text-orange-300 font-medium text-base">
