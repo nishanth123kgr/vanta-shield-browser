@@ -21,7 +21,7 @@ const Index = () => {
         <Card 
           className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-lg overflow-hidden"
           style={{
-            borderTop: "2px solid transparent",
+            borderTop: "3px solid",
             borderImage: "linear-gradient(to right, #fb923c, #ef4444) 1",
           }}
         >
