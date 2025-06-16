@@ -1,17 +1,29 @@
 
-import { Shield, AlertTriangle, ArrowLeft, Globe, Lock } from "lucide-react";
+import { Shield, AlertTriangle, ArrowLeft, Globe, Lock, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
+  const { toast } = useToast();
+  
   const handleGoBack = () => {
     window.history.back();
   };
+  
   const handleVisitHalonex = () => {
     window.open('https://halonex.app', '_blank');
   };
+  
   const handleReportSafe = () => {
     console.log("Reporting site as safe");
+  };
+
+  const handleAddToWhitelist = () => {
+    toast({
+      title: "Added to Whitelist",
+      description: "suspicious-banking-site.com has been added to your whitelist.",
+    });
   };
 
   return (
@@ -33,15 +45,18 @@ const Index = () => {
                 </div>
               </div>
 
-              <h1 className="text-4xl font-bold text-white mb-4">
+              <h1 className="text-4xl font-bold text-white mb-6">
                 Site Blocked
               </h1>
 
-              {/* Blocked domain display */}
-              <div className="bg-red-500/20 backdrop-blur-sm border border-red-400/30 rounded-lg px-4 py-3 mb-4">
-                <p className="text-red-300 font-mono text-lg break-all">
-                  suspicious-banking-site.com
-                </p>
+              {/* Blocked domain display - new approach */}
+              <div className="mb-6">
+                <p className="text-white/70 text-sm mb-2">Blocked Domain</p>
+                <div className="bg-neutral-800/80 border border-neutral-700 rounded-lg px-6 py-4">
+                  <p className="text-white font-mono text-xl font-medium">
+                    suspicious-banking-site.com
+                  </p>
+                </div>
               </div>
               
               <div className="inline-block bg-orange-500/20 backdrop-blur-sm border border-orange-400/30 px-5 py-2.5 rounded-full mb-4">
@@ -93,6 +108,11 @@ const Index = () => {
               <Button onClick={handleGoBack} size="lg" className="w-full bg-blue-600/80 backdrop-blur-sm border border-blue-500/50 hover:bg-blue-600 text-white rounded-lg font-medium text-lg py-4">
                 <ArrowLeft className="h-6 w-6 mr-2" />
                 Go Back Safely
+              </Button>
+              
+              <Button onClick={handleAddToWhitelist} variant="outline" size="lg" className="w-full border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-lg font-medium text-lg py-4">
+                <Plus className="h-6 w-6 mr-2" />
+                Add to Whitelist
               </Button>
             </div>
 
