@@ -1,27 +1,33 @@
+
 import { Shield, AlertTriangle, ArrowLeft, Globe, Lock, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+
 const Index = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
   const handleGoBack = () => {
     window.history.back();
   };
+
   const handleVisitHalonex = () => {
     window.open('https://halonex.app', '_blank');
   };
+
   const handleReportSafe = () => {
     console.log("Reporting site as safe");
   };
+
   const handleAddToWhitelist = () => {
     toast({
       title: "Added to Whitelist",
       description: "suspicious-banking-site.com has been added to your whitelist."
     });
   };
-  return <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
+
+  return (
+    <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
       {/* Main container */}
       <div className="relative w-full max-w-2xl mx-auto">
         <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-lg overflow-hidden relative">
@@ -59,7 +65,7 @@ const Index = () => {
             </div>
 
             {/* Main warning */}
-            <div className="bg-orange-500/15 backdrop-blur-sm border border-orange-400/30 rounded-xl p-6 mb-6 w-full ">
+            <div className="bg-orange-500/15 backdrop-blur-sm border border-orange-400/30 rounded-xl p-6 mb-6 w-full">
               <div className="flex items-start gap-4">
                 <div className="flex items-center justify-center w-10 h-10 bg-orange-500/30 rounded-lg flex-shrink-0">
                   <AlertTriangle className="h-6 w-6 text-orange-300" strokeWidth={2} />
@@ -96,13 +102,22 @@ const Index = () => {
             </div>
 
             {/* Action buttons */}
-            <div className=" mb-6 flex">
-              <Button onClick={handleGoBack} size="lg" className="w-full bg-blue-600/80 backdrop-blur-sm border border-blue-500/50 hover:bg-blue-600 text-white rounded-lg font-medium text-lg py-4">
+            <div className="mb-6 flex gap-4 w-full">
+              <Button 
+                onClick={handleGoBack} 
+                size="lg" 
+                className="flex-1 bg-blue-600/80 backdrop-blur-sm border border-blue-500/50 hover:bg-blue-600 text-white rounded-lg font-medium text-lg py-4"
+              >
                 <ArrowLeft className="h-6 w-6 mr-2" />
                 Go Back Safely
               </Button>
               
-              <Button onClick={handleAddToWhitelist} variant="outline" size="lg" className="w-full border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-lg font-medium text-lg py-[16px]">
+              <Button 
+                onClick={handleAddToWhitelist} 
+                variant="outline" 
+                size="lg" 
+                className="flex-1 border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-lg font-medium text-lg py-4"
+              >
                 <Plus className="h-6 w-6 mr-2" />
                 Add to Whitelist
               </Button>
@@ -124,6 +139,8 @@ const Index = () => {
           </CardContent>
         </Card>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
