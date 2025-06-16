@@ -1,42 +1,34 @@
-
 import { Shield, AlertTriangle, ArrowLeft, Globe, Lock, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-
 const Index = () => {
-  const { toast } = useToast();
-  
+  const {
+    toast
+  } = useToast();
   const handleGoBack = () => {
     window.history.back();
   };
-  
   const handleVisitHalonex = () => {
     window.open('https://halonex.app', '_blank');
   };
-  
   const handleReportSafe = () => {
     console.log("Reporting site as safe");
   };
-
   const handleAddToWhitelist = () => {
     toast({
       title: "Added to Whitelist",
-      description: "suspicious-banking-site.com has been added to your whitelist.",
+      description: "suspicious-banking-site.com has been added to your whitelist."
     });
   };
-
-  return (
-    <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
+  return <div className="min-h-screen bg-neutral-900 flex items-center justify-center p-4">
       {/* Main container */}
       <div className="relative w-full max-w-2xl mx-auto">
-        <Card 
-          className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-lg overflow-hidden relative"
-        >
+        <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-lg overflow-hidden relative">
           {/* Gradient border top */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-400 to-red-500 rounded-t-lg"></div>
           
-          <CardContent className="p-10">
+          <CardContent className="p-10 flex flex-col items-center">
             {/* Header */}
             <div className="text-center mb-8">
               <div className="flex justify-center mb-6">
@@ -52,8 +44,8 @@ const Index = () => {
               {/* Blocked domain display - new approach */}
               <div className="mb-6">
                 <p className="text-white/70 text-sm mb-2">Blocked Domain</p>
-                <div className="bg-neutral-800/80 border border-neutral-700 rounded-lg px-6 py-4">
-                  <p className="text-white font-mono text-xl font-medium">
+                <div className="bg-neutral-800/80 border border-neutral-700 rounded-lg py-4 w-max px-[16px]">
+                  <p className="text-white font-mono font-normal text-base">
                     suspicious-banking-site.com
                   </p>
                 </div>
@@ -67,7 +59,7 @@ const Index = () => {
             </div>
 
             {/* Main warning */}
-            <div className="bg-orange-500/15 backdrop-blur-sm border border-orange-400/30 rounded-xl p-6 mb-6">
+            <div className="bg-orange-500/15 backdrop-blur-sm border border-orange-400/30 rounded-xl p-6 mb-6 w-full ">
               <div className="flex items-start gap-4">
                 <div className="flex items-center justify-center w-10 h-10 bg-orange-500/30 rounded-lg flex-shrink-0">
                   <AlertTriangle className="h-6 w-6 text-orange-300" strokeWidth={2} />
@@ -82,7 +74,7 @@ const Index = () => {
             </div>
 
             {/* Quick info grid */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-4 mb-6 w-full">
               <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg p-4">
                 <div className="flex items-center gap-3">
                   <Globe className="h-5 w-5 text-blue-300" />
@@ -104,13 +96,13 @@ const Index = () => {
             </div>
 
             {/* Action buttons */}
-            <div className="space-y-4 mb-6">
+            <div className=" mb-6 flex">
               <Button onClick={handleGoBack} size="lg" className="w-full bg-blue-600/80 backdrop-blur-sm border border-blue-500/50 hover:bg-blue-600 text-white rounded-lg font-medium text-lg py-4">
                 <ArrowLeft className="h-6 w-6 mr-2" />
                 Go Back Safely
               </Button>
               
-              <Button onClick={handleAddToWhitelist} variant="outline" size="lg" className="w-full border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-lg font-medium text-lg py-4">
+              <Button onClick={handleAddToWhitelist} variant="outline" size="lg" className="w-full border-white/20 bg-white/5 hover:bg-white/10 text-white rounded-lg font-medium text-lg py-[16px]">
                 <Plus className="h-6 w-6 mr-2" />
                 Add to Whitelist
               </Button>
@@ -132,7 +124,6 @@ const Index = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
 export default Index;
