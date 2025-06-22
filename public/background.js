@@ -3,9 +3,57 @@ console.log('Vanta Shield background script loaded');
 
 // Store blocked attempts counter
 let blockedAttempts = 0;
+let blockedToday = 0;
+let totalThreatsBlocked = 0;
+let lastResetDate = null;
 
 // Cache duration in milliseconds (24 hours)
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
+
+// Initialize counters from storage
+chrome.storage.local.get(['blockedToday', 'totalThreatsBlocked', 'lastResetDate'], (result) => {
+  const today = new Date().toDateString();
+  lastResetDate = result.lastResetDate || today;
+  
+  // Reset daily counter if it's a new day
+  if (lastResetDate !== today) {
+    blockedToday = 0;
+    chrome.storage.local.set({
+      'blockedToday': 0,
+      'lastResetDate': today
+    });
+  } else {
+    blockedToday = result.blockedToday || 0;
+  }
+  
+  totalThreatsBlocked = result.totalThreatsBlocked || 0;
+  console.log(`Initialized: Today: ${blockedToday}, Total: ${totalThreatsBlocked}`);
+});
+
+// Function to increment threat counters
+function incrementThreatCounters() {
+  const today = new Date().toDateString();
+  
+  // Reset daily counter if it's a new day
+  if (lastResetDate !== today) {
+    blockedToday = 0;
+    lastResetDate = today;
+  }
+  
+  blockedToday++;
+  totalThreatsBlocked++;
+  blockedAttempts++;
+  
+  // Save to storage
+  chrome.storage.local.set({
+    'blockedToday': blockedToday,
+    'totalThreatsBlocked': totalThreatsBlocked,
+    'vanta_blocked_attempts': blockedAttempts,
+    'lastResetDate': lastResetDate
+  });
+  
+  console.log(`Threat blocked - Today: ${blockedToday}, Total: ${totalThreatsBlocked}`);
+}
 
 // Hash hostname function
 async function hashHostname(hostname) {
@@ -160,9 +208,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       if (isThreat) {
         console.log(`Blocking malicious site: ${hostName}`);
         
-        // Increment blocked attempts
-        blockedAttempts++;
-        chrome.storage.local.set({ 'vanta_blocked_attempts': blockedAttempts });
+        // Increment threat counters
+        incrementThreatCounters();
         
         // Redirect to warning page
         chrome.tabs.update(tabId, {
@@ -199,6 +246,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   
   if (request.type === 'getBlockedAttempts') {
     sendResponse({ count: blockedAttempts });
+  }
+  
+  if (request.type === 'getThreatStats') {
+    sendResponse({ 
+      blockedToday: blockedToday,
+      totalThreatsBlocked: totalThreatsBlocked
+    });
   }
   
   if (request.type === 'getWhitelistedDomains') {

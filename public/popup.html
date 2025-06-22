@@ -5,164 +5,722 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vanta Shield</title>
   <style>
+    /* Keyframes */
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      25% {
+        transform: translate(20px, -30px) scale(1.05);
+      }
+      50% {
+        transform: translate(-15px, 20px) scale(0.95);
+      }
+      75% {
+        transform: translate(25px, 10px) scale(1.02);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     body {
-      width: 350px;
-      height: 500px;
+    
+      width: 380px;
+      /* height: 600px; */
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #000000 100%);
       color: white;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow: hidden;
+      position: relative;
+      border-radius: 16px;
+    }
+
+    /* Animated background similar to the main app */
+    .animated-background {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bg-gradient-base {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #000000 100%);
+    }
+
+    .floating-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+
+    .orb-1 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, rgba(79, 70, 229, 0.2) 30%, rgba(59, 130, 246, 0.1) 60%, transparent 100%);
+      left: -50px;
+      top: -100px;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.2) 40%, rgba(168, 85, 247, 0.1) 70%, transparent 100%);
+      right: -80px;
+      bottom: -60px;
+      animation: float 20s ease-in-out infinite reverse;
+    }
+
+    .orb-3 {
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.25) 0%, rgba(14, 165, 233, 0.2) 50%, transparent 100%);
+      left: -30px;
+      bottom: 100px;
+      animation: float 18s ease-in-out infinite;
+      animation-delay: 5s;
+    }
+
+    .mesh-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, transparent 50%, rgba(0,0,0,0.2) 100%);
     }
     
     .container {
-      padding: 20px;
+      padding: 18px;
       height: 100%;
       display: flex;
       flex-direction: column;
+      position: relative;
+      z-index: 10;
+      border-radius: 16px;
+      overflow: hidden;
+      opacity: 1; /* Remove animation flicker */
     }
     
     .header {
       text-align: center;
       margin-bottom: 20px;
+      flex-shrink: 0;
     }
-    
-    .logo {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 10px;
-      background: rgba(255, 255, 255, 0.1);
+
+    .version-info {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.4);
+      z-index: 20;
+    }
+
+    .logo img {
+      margin-top: 12px;
+      width: 150px;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+    .status-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      /* flex-grow: 1; */
+      /* min-height: 280px; */
+    }
+
+    .status-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent, rgba(255,255,255,0.1));
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: xor;
+      pointer-events: none;
+    }
+
+    .protection-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .protection-toggle:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .protection-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .protection-status-icon {
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 14px;
+      transition: all 0.3s ease;
     }
-    
-    .title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
+
+    .protection-status-icon.active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      animation: pulse 2s infinite;
     }
-    
-    .subtitle {
-      font-size: 12px;
+
+    .protection-status-icon.inactive {
+      background: linear-gradient(135deg, #6b7280, #4b5563);
+    }
+
+    .protection-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .protection-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .protection-title.active {
+      color: #10b981;
+    }
+
+    .protection-title.inactive {
+      color: #6b7280;
+    }
+
+    .protection-subtitle {
+      font-size: 11px;
       opacity: 0.7;
     }
-    
-    .status-card {
+
+    /* Toggle Switch Styles */
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      cursor: pointer;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(107, 114, 128, 0.5);
+      border: 1px solid rgba(107, 114, 128, 0.3);
+      transition: all 0.3s ease;
+      border-radius: 26px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background: white;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-color: #10b981;
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      /* margin-bottom: 12px; */
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 10px 8px;
+      transition: all 0.2s ease;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-item.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .stat-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .stat-icon {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .current-site {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    
-    .status-row {
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: center;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      flex-direction: column;
+      justify-content: center;
     }
-    
-    .status-row:last-child {
-      margin-bottom: 0;
+
+    .current-site:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
     }
-    
-    .status-label {
+
+    .current-site .stat-value {
       font-size: 13px;
-      opacity: 0.8;
-    }
-    
-    .status-value {
-      font-weight: bold;
-      font-size: 14px;
+      font-weight: 600;
+      word-break: break-all;
+      color: #60a5fa;
     }
     
     .status-value.protected {
       color: #10b981;
     }
+
+    .status-value.protected .stat-icon {
+      background: #10b981;
+      animation: pulse 2s infinite;
+    }
     
     .status-value.blocked {
       color: #ef4444;
     }
+
+    .status-value.blocked .stat-icon {
+      background: #ef4444;
+      animation: pulse 2s infinite;
+    }
+
+    .status-value.warning {
+      color: #f59e0b;
+    }
+
+    .status-value.warning .stat-icon {
+      background: #f59e0b;
+      animation: pulse 2s infinite;
+    }
     
     .actions {
-      margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      flex-shrink: 0;
     }
     
+    /* Action Buttons - Using Stat Item Styles */
     .button {
-      width: 100%;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      margin-bottom: 10px;
-      transition: all 0.2s;
-    }
-    
-    .button:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-    
-    .button.primary {
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      border-color: #3b82f6;
-    }
-    
-    .button.primary:hover {
-      background: linear-gradient(135deg, #2563eb, #1e40af);
-    }
-    
-    .footer {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 10px 8px;
+      transition: all 0.2s ease;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      height: auto;
+      min-height: auto;
+    }
+
+    /* Glass shine effect */
+    .button::before {
+      display: none; /* Remove custom shine effect */
+    }
+
+    .button:hover::before {
+      display: none; /* Remove custom shine effect */
+    }
+
+    .button-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .button-icon {
+      font-size: 16px;
+      line-height: 1;
+      opacity: 0.9;
+      margin-bottom: 2px;
+    }
+
+    .button-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1px;
+    }
+
+    .button-title {
       font-size: 11px;
-      opacity: 0.5;
-      margin-top: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+      opacity: 0.9;
+    }
+
+    .button-subtitle {
+      font-size: 9px;
+      opacity: 0.6;
+      font-weight: 400;
+      line-height: 1.2;
+      display: none; /* Hide subtitle to keep compact like status cards */
+    }
+
+    .button-action {
+      display: none; /* Remove arrow to match status card style */
+    }
+
+    /* Button Hover Effects - Matching Stat Item Style */
+    .button:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .button:active {
+      transform: translateY(0);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Button Content Styling */
+
+    .button:hover .button-action {
+      color: rgba(255, 255, 255, 0.7);
+      transform: translateX(2px);
+    }
+
+    .button:active {
+      transform: translateY(0px);
+      transition: transform 0.1s ease;
+    }
+
+    /* Specific Button Styles */
+    .button.whitelist {
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    .button.whitelist .button-icon {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(21, 128, 61, 0.1));
+      border-color: rgba(34, 197, 94, 0.25);
+      color: #22c55e;
+    }
+
+    .button.whitelist:hover {
+      border-color: rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.05);
+    }
+
+    .button.settings {
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    .button.settings .button-icon {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(67, 56, 202, 0.1));
+      border-color: rgba(99, 102, 241, 0.25);
+      color: #6366f1;
+    }
+
+    .button.settings:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .button.report {
+      border-color: rgba(249, 115, 22, 0.2);
+    }
+
+    .button.report .button-icon {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(194, 65, 12, 0.1));
+      border-color: rgba(249, 115, 22, 0.25);
+      color: #f97316;
+    }
+
+    .button.report:hover {
+      border-color: rgba(249, 115, 22, 0.3);
+      background: rgba(249, 115, 22, 0.05);
+    }
+
+    /* Button States - Following Stat Item Color System */
+    .button.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .button.success {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+    }
+
+    .button.danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    .button.warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+
+    .button.disabled:hover {
+      transform: none;
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Stat Item Hover - Following Status Card Pattern */
+    .stat-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* Loading animation */
+    .loading-dots {
+      display: inline-block;
+    }
+
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.5s infinite;
+    }
+
+    @keyframes dots {
+      0%, 20% {
+        content: '';
+      }
+      40% {
+        content: '.';
+      }
+      60% {
+        content: '..';
+      }
+      80%, 100% {
+        content: '...';
+      }
+    }
+
+    /* Footer Styles */
+    .footer {
+      margin-top: 12px;
+      padding: 8px 0;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 0 0 20px 20px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     }
   </style>
 </head>
 <body>
+  <!-- Animated Background -->
+  <div class="animated-background">
+    <div class="bg-gradient-base"></div>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+    <div class="mesh-overlay"></div>
+  </div>
+
+  <!-- Version info in top left -->
+  <div class="version-info">
+    HALONEX VANTA v1.0
+  </div>
+
   <div class="container">
     <div class="header">
-      <div class="logo">🛡️</div>
-      <div class="title">Vanta Shield</div>
-      <div class="subtitle">Browser Protection</div>
+      <div class="logo">
+        <img src="vanta-logo-cropped.png" alt="Vanta Shield Logo" />
+      </div>
     </div>
     
     <div class="status-card">
-      <div class="status-row">
-        <span class="status-label">Protection Status</span>
-        <span class="status-value protected" id="protection-status">Active</span>
+      <!-- Protection Toggle -->
+      <div class="protection-toggle">
+        <div class="protection-info">
+          <div class="protection-text">
+            <div class="protection-title active" id="protection-title">Real-time Protection</div>
+            <div class="protection-subtitle" id="protection-subtitle">All threats blocked</div>
+          </div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="protection-toggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
       </div>
-      <div class="status-row">
-        <span class="status-label">Threats Blocked</span>
-        <span class="status-value blocked" id="blocked-count">Loading...</span>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-label">Blocked Today</div>
+          <div class="stat-value blocked" id="blocked-count">
+            0
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-label">Total Threats</div>
+          <div class="stat-value blocked" id="total-threats">
+            0
+          </div>
+        </div>
+
+        <div class="stat-item full-width">
+          <div class="stat-label">Current Site</div>
+          <div class="stat-value safe" id="current-site-status">
+            example.com
+          </div>
+        </div>
+        
+        
       </div>
-      <div class="status-row">
-        <span class="status-label">Current Site</span>
-        <span class="status-value" id="current-site">Loading...</span>
-      </div>
-      <div class="status-row">
-        <span class="status-label">Engine Version</span>
-        <span class="status-value" id="engine-version">1.0</span>
-      </div>
+
+     
     </div>
     
     <div class="actions">
-      <button class="button primary" id="scan-btn">Scan Current Page</button>
-      <button class="button" id="whitelist-btn">Whitelist This Site</button>
-      <button class="button" id="settings-btn">Settings</button>
-      <button class="button" id="report-btn">Report False Positive</button>
+      <button class="button whitelist" id="whitelist-btn">
+        <div class="button-content">
+          <div class="button-icon">🛡️</div>
+          <div class="button-text">
+            <div class="button-title">Whitelist</div>
+          </div>
+        </div>
+      </button>
+      
+      <button class="button settings" id="settings-btn">
+        <div class="button-content">
+          <div class="button-icon">⚙️</div>
+          <div class="button-text">
+            <div class="button-title">Settings</div>
+          </div>
+        </div>
+      </button>
     </div>
     
     <div class="footer">
-      Powered by Halonex Vanta
+      // SECURING TOMORROW TODAY
     </div>
   </div>
   
