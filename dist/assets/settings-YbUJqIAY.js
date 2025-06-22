@@ -1,0 +1,1 @@
+import{Q as t,e as s,j as e,f as r,a as o,T as i,b as n,c as a}from"./index-CZE30H_O.js";import{S as c}from"./Settings-QAkgRle7.js";const l=new t,d=()=>e.jsx(o,{client:l,children:e.jsxs(i,{children:[e.jsx(n,{}),e.jsx(a,{}),e.jsx(c,{})]})});s.createRoot(document.getElementById("root")).render(e.jsx(r.StrictMode,{children:e.jsx(d,{})}));

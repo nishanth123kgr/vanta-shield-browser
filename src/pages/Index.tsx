@@ -108,30 +108,44 @@ const Index = () => {
     setIsAnimating(true);
     
     try {
-      // Generate SHA256 hash of the domain using crypto-js
-      const hashHex = CryptoJS.SHA256(domain).toString(CryptoJS.enc.Hex);
-      
-      // Send message to Chrome extension background script
-      const key = `vanta_${hashHex}`;
-      
       // Check if Chrome extension API is available
       if (chromeAPI && chromeAPI.runtime && chromeAPI.runtime.sendMessage) {
-        chromeAPI.runtime.sendMessage({ type: "setData", key: key, value: "0" });
-        console.log(`Added to whitelist via Chrome extension: ${key} = 0`);
-      } else {
-        // Fallback to localStorage if Chrome extension API is not available
-        localStorage.setItem(key, '0');
-        console.log(`Added to whitelist via localStorage: ${key} = 0`);
-      }
-      
-      setTimeout(() => {
-        toast({
-          title: "Added to Whitelist",
-          description: `${domain} has been added to your whitelist.`,
-          variant: "default",
+        chromeAPI.runtime.sendMessage({ 
+          type: "addToWhitelist", 
+          domain: domain 
+        }, (response) => {
+          if (response && response.success) {
+            console.log(`Added to whitelist via Chrome extension: ${domain}`);
+            toast({
+              title: "Added to Whitelist",
+              description: `${domain} has been added to your whitelist.`,
+              variant: "default",
+            });
+          } else {
+            toast({
+              title: "Error",
+              description: "Failed to add site to whitelist.",
+              variant: "destructive",
+            });
+          }
+          setIsAnimating(false);
         });
-        setIsAnimating(false);
-      }, 300);
+      } else {
+        // Fallback to localStorage with hash
+        const hashHex = CryptoJS.SHA256(domain).toString(CryptoJS.enc.Hex);
+        const key = `vanta_${hashHex}`;
+        localStorage.setItem(key, domain);
+        console.log(`Added to whitelist via localStorage: ${key} = ${domain}`);
+        
+        setTimeout(() => {
+          toast({
+            title: "Added to Whitelist",
+            description: `${domain} has been added to your whitelist.`,
+            variant: "default",
+          });
+          setIsAnimating(false);
+        }, 300);
+      }
     } catch (error) {
       console.error('Error adding to whitelist:', error);
       setTimeout(() => {

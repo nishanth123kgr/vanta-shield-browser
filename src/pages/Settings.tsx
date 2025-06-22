@@ -1,3 +1,14 @@
+import { Shield, Settings as SettingsIcon, Save, RotateCcw, Bell, Globe, Lock, Eye, Database, Info, ArrowLeft, Plus, Trash2, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import AnimatedBackground from "@/components/AnimatedBackground";
+
 // Extend the existing chrome API declaration
 interface ExtendedChrome {
   runtime: {
@@ -11,19 +22,6 @@ interface ExtendedChrome {
   };
 }
 
-// Use global chrome object
-const chromeAPI = (window as any).chrome || window.chrome as ExtendedChrome;
-
-import { Shield, Settings as SettingsIcon, Save, RotateCcw, Bell, Globe, Lock, Eye, Database, Info, ArrowLeft } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/hooks/use-toast";
-import AnimatedBackground from "@/components/AnimatedBackground";
-
 interface SettingsData {
   realTimeProtection: boolean;
   blockMaliciousDownloads: boolean;
@@ -34,10 +32,22 @@ interface SettingsData {
   debugMode: boolean;
 }
 
+interface WhitelistedDomain {
+  hash: string;
+  domain: string;
+  key: string;
+}
+
 const Settings = () => {
+  // Use global chrome object
+  const chromeAPI = (window as any).chrome || window.chrome as ExtendedChrome;
+  
   const { toast } = useToast();
   const [isAnimating, setIsAnimating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [whitelistedDomains, setWhitelistedDomains] = useState<WhitelistedDomain[]>([]);
+  const [newDomain, setNewDomain] = useState("");
+  const [isAddingDomain, setIsAddingDomain] = useState(false);
   const engineVersion = "1.0";
 
   // Default settings
@@ -56,6 +66,7 @@ const Settings = () => {
   useEffect(() => {
     // Load settings from Chrome storage or localStorage
     loadSettings();
+    loadWhitelistedDomains();
   }, []);
 
   const loadSettings = () => {
@@ -75,6 +86,155 @@ const Settings = () => {
       }
     } catch (error) {
       console.error('Error loading settings:', error);
+    }
+  };
+
+  const loadWhitelistedDomains = () => {
+    console.log('Loading whitelisted domains...');
+    try {
+      if (chromeAPI && chromeAPI.runtime && chromeAPI.runtime.sendMessage) {
+        console.log('Using Chrome API to get whitelisted domains');
+        chromeAPI.runtime.sendMessage({ type: 'getWhitelistedDomains' }, (response) => {
+          console.log('Received response from background script:', response);
+          if (response && response.domains) {
+            console.log('Setting whitelisted domains:', response.domains);
+            setWhitelistedDomains(response.domains);
+          } else {
+            console.log('No domains in response or invalid response');
+            setWhitelistedDomains([]);
+          }
+        });
+      } else {
+        console.log('Chrome API not available, using localStorage fallback');
+        // Fallback to localStorage
+        const domains: WhitelistedDomain[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('vanta_') && 
+              !key.startsWith('vanta_cache_') && 
+              !key.startsWith('vanta_blocked_') &&
+              !key.startsWith('vanta_engine_') &&
+              key !== 'vantaSettings') {
+            const value = localStorage.getItem(key);
+            console.log(`Found localStorage key: ${key} = ${value}`);
+            if (value && value !== '0') {
+              domains.push({
+                hash: key.replace('vanta_', ''),
+                domain: value,
+                key: key
+              });
+            }
+          }
+        }
+        console.log('Setting domains from localStorage:', domains);
+        setWhitelistedDomains(domains);
+      }
+    } catch (error) {
+      console.error('Error loading whitelisted domains:', error);
+    }
+  };
+
+  const addDomain = () => {
+    if (!newDomain.trim()) return;
+    
+    setIsAddingDomain(true);
+    
+    // Normalize domain (remove protocol, www, etc.)
+    let cleanDomain = newDomain.trim().toLowerCase();
+    cleanDomain = cleanDomain.replace(/^https?:\/\//, '');
+    cleanDomain = cleanDomain.replace(/^www\./, '');
+    cleanDomain = cleanDomain.split('/')[0]; // Remove path
+    
+    try {
+      if (chromeAPI && chromeAPI.runtime && chromeAPI.runtime.sendMessage) {
+        chromeAPI.runtime.sendMessage({ 
+          type: 'addToWhitelist', 
+          domain: cleanDomain 
+        }, (response) => {
+          if (response && response.success) {
+            loadWhitelistedDomains(); // Reload the list
+            setNewDomain("");
+            toast({
+              title: "Domain Added",
+              description: `${cleanDomain} has been added to your whitelist.`,
+              variant: "default",
+            });
+          } else {
+            toast({
+              title: "Error",
+              description: "Failed to add domain to whitelist.",
+              variant: "destructive",
+            });
+          }
+          setIsAddingDomain(false);
+        });
+      } else {
+        // Fallback to localStorage
+        const CryptoJS = (window as any).CryptoJS;
+        if (CryptoJS) {
+          const hashHex = CryptoJS.SHA256(cleanDomain).toString(CryptoJS.enc.Hex);
+          const key = `vanta_${hashHex}`;
+          localStorage.setItem(key, cleanDomain);
+          loadWhitelistedDomains(); // Reload the list
+          setNewDomain("");
+          toast({
+            title: "Domain Added",
+            description: `${cleanDomain} has been added to your whitelist.`,
+            variant: "default",
+          });
+        }
+        setIsAddingDomain(false);
+      }
+    } catch (error) {
+      console.error('Error adding domain:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add domain to whitelist.",
+        variant: "destructive",
+      });
+      setIsAddingDomain(false);
+    }
+  };
+
+  const removeDomain = (domainToRemove: WhitelistedDomain) => {
+    try {
+      if (chromeAPI && chromeAPI.runtime && chromeAPI.runtime.sendMessage) {
+        chromeAPI.runtime.sendMessage({ 
+          type: 'removeFromWhitelist', 
+          key: domainToRemove.key 
+        }, (response) => {
+          if (response && response.success) {
+            loadWhitelistedDomains(); // Reload the list
+            toast({
+              title: "Domain Removed",
+              description: `${domainToRemove.domain} has been removed from your whitelist.`,
+              variant: "default",
+            });
+          } else {
+            toast({
+              title: "Error",
+              description: "Failed to remove domain from whitelist.",
+              variant: "destructive",
+            });
+          }
+        });
+      } else {
+        // Fallback to localStorage
+        localStorage.removeItem(domainToRemove.key);
+        loadWhitelistedDomains(); // Reload the list
+        toast({
+          title: "Domain Removed",
+          description: `${domainToRemove.domain} has been removed from your whitelist.`,
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Error removing domain:', error);
+      toast({
+        title: "Error",
+        description: "Failed to remove domain from whitelist.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -290,6 +450,66 @@ const Settings = () => {
                     checked={settings.autoWhitelist}
                     onCheckedChange={(value) => handleSettingChange('autoWhitelist', value)}
                   />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Whitelist Management */}
+            <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-lg overflow-hidden">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-orange-400" />
+                  <CardTitle className="text-lg font-semibold text-white">Whitelisted Sites</CardTitle>
+                </div>
+                <p className="text-sm text-white/60">Manage trusted domains that will never be blocked</p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Add new domain */}
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Enter domain (e.g., example.com)"
+                    value={newDomain}
+                    onChange={(e) => setNewDomain(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && addDomain()}
+                    className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-white/50"
+                  />
+                  <Button
+                    onClick={addDomain}
+                    disabled={isAddingDomain || !newDomain.trim()}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <Separator className="bg-white/10" />
+                
+                {/* List of whitelisted domains */}
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {whitelistedDomains.length === 0 ? (
+                    <div className="text-center py-8 text-white/60">
+                      <Globe className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                      <p>No whitelisted domains yet</p>
+                      <p className="text-sm">Add trusted sites to skip security checks</p>
+                    </div>
+                  ) : (
+                    whitelistedDomains.map((domain) => (
+                      <div key={domain.key} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                        <div className="flex items-center gap-3">
+                          <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                          <span className="text-white font-medium">{domain.domain}</span>
+                        </div>
+                        <Button
+                          onClick={() => removeDomain(domain)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>

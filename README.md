@@ -13,6 +13,24 @@ npm run build:extension
 ```
 Then load the `dist` folder as an unpacked extension in Chrome.
 
+## ✅ Whitelist Management
+
+Vanta Shield now includes comprehensive whitelist functionality:
+
+### Features:
+- **Settings Page Management**: Add, view, and remove whitelisted domains
+- **Popup Quick-Add**: Whitelist current site directly from browser popup
+- **Blocked Page Whitelist**: Add domains when they're flagged as threats
+- **Domain Storage**: Actual domain names stored (not just flags)
+- **Chrome Extension API**: Full integration with Chrome storage
+
+### Usage:
+1. **Via Settings**: Navigate to Settings → Whitelisted Sites to manage domains
+2. **Via Popup**: Click the extension icon and select "Whitelist This Site"
+3. **Via Blocked Page**: When a site is blocked, use "Add to Whitelist" option
+
+See [WHITELIST_DOCUMENTATION.md](./WHITELIST_DOCUMENTATION.md) for complete details.
+
 ## 🌐 Web Application
 
 The project can also run as a standalone web application for testing and development.
