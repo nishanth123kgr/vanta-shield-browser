@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Settings button functionality
   settingsBtn.addEventListener('click', function() {
     chrome.tabs.create({
-      url: chrome.runtime.getURL('settings.html')
+      url: chrome.runtime.getURL('settings-react.html')
     });
   });
 

@@ -24,6 +24,8 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
+        indexStandalone: path.resolve(__dirname, 'index-standalone.html'),
+        settings: path.resolve(__dirname, 'settings-standalone.html'),
       },
       output: {
         entryFileNames: 'assets/[name]-[hash].js',

@@ -116,7 +116,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         
         // Redirect to warning page
         chrome.tabs.update(tabId, {
-          url: chrome.runtime.getURL("index.html") + "?domain=" + encodeURIComponent(hostName)
+          url: chrome.runtime.getURL("index-standalone.html") + "?domain=" + encodeURIComponent(hostName)
         });
       }
     } catch (error) {
@@ -185,6 +185,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     })();
     return true; // Will respond asynchronously
+  }
+  
+  // Handle opening settings page
+  if (request.type === 'openSettings') {
+    chrome.tabs.create({
+      url: chrome.runtime.getURL('settings-react.html')
+    });
+    sendResponse({ success: true });
   }
 });
 

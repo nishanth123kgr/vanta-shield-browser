@@ -12,7 +12,7 @@ declare global {
 // Use global chrome object
 const chromeAPI = (window as any).chrome || window.chrome;
 
-import { Shield, AlertTriangle, ArrowLeft, Globe, Lock, Plus, Info, ExternalLink, Clock } from "lucide-react";
+import { Shield, AlertTriangle, ArrowLeft, Globe, Lock, Plus, Info, ExternalLink, Clock, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -77,6 +77,19 @@ const Index = () => {
 
   const handleGoBack = () => {
     window.history.back();
+  };
+
+  const handleOpenSettings = () => {
+    // Check if we're in an extension context
+    if (chromeAPI && chromeAPI.runtime) {
+      // Open settings page in new tab for extension
+      chromeAPI.runtime.sendMessage({
+        type: 'openSettings'
+      });
+    } else {
+      // For regular web app, try to navigate to settings
+      window.location.href = '/settings-standalone.html';
+    }
   };
 
   const handleVisitSafe = () => {
@@ -156,6 +169,18 @@ const Index = () => {
         <span>// HALONEX VANTA v{engineVersion}</span>
       </div>
 
+      {/* Settings button in top right */}
+      <div className="absolute top-4 right-4 z-10">
+        <Button
+          onClick={handleOpenSettings}
+          variant="ghost"
+          size="sm"
+          className="text-white/60 hover:text-white hover:bg-white/10 transition-all"
+        >
+          <Settings className="h-4 w-4" />
+        </Button>
+      </div>
+
       {/* Main container */}
       <div className={`relative w-full max-w-6xl mx-auto transition-all duration-300 z-10 ${isAnimating ? 'scale-[0.98] opacity-90' : 'scale-100 opacity-100'}`}>
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-center">
@@ -230,8 +255,7 @@ const Index = () => {
                 <div>
                   <h3 className="text-red-100 font-bold text-base mb-2">Malicious Website</h3>
                   <p className="text-red-200 text-sm leading-relaxed font-medium">
-                    This website contains malware that could compromise your device and steal sensitive data including passwords, banking information, and personal files.
-                  </p>
+Vanta Shield has detected that this site may be malicious. This site could be attempting phishing, malware distribution, or other harmful activities.                  </p>
 
 
 

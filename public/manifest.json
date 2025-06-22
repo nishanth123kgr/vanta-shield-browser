@@ -47,11 +47,15 @@
     {
       "resources": [
         "index.html",
+        "index-standalone.html",
+        "settings-react.html",
+        "settings-standalone.html", 
         "assets/*"
       ],
       "matches": [
         "<all_urls>"
       ]
     }
-  ]
+  ],
+  "options_page": "settings-react.html"
 }
