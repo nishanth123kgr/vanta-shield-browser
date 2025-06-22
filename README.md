@@ -1,4 +1,21 @@
-# Welcome to your Lovable project
+# Vanta Shield Browser Protection
+
+A powerful React-based security solution that can run as both a web application and Chrome extension to protect users from malicious websites and online threats.
+
+## 🛡️ Chrome Extension
+
+This project includes a complete Chrome extension implementation! See [CHROME_EXTENSION_README.md](./CHROME_EXTENSION_README.md) for detailed instructions.
+
+### Quick Start for Chrome Extension
+```bash
+npm install
+npm run build:extension
+```
+Then load the `dist` folder as an unpacked extension in Chrome.
+
+## 🌐 Web Application
+
+The project can also run as a standalone web application for testing and development.
 
 ## Project info
 

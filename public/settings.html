@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanta Shield Settings</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+    
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.7;
+    }
+    
+    .section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      color: #3b82f6;
+    }
+    
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+    
+    .setting-label {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    
+    .setting-description {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    
+    .toggle {
+      width: 50px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .toggle.active {
+      background: #3b82f6;
+    }
+    
+    .toggle-slider {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+    
+    .toggle.active .toggle-slider {
+      transform: translateX(24px);
+    }
+    
+    .button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-right: 12px;
+    }
+    
+    .button:hover {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      transform: translateY(-1px);
+    }
+    
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #3b82f6;
+      margin-bottom: 4px;
+    }
+    
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🛡️</div>
+      <div class="title">Vanta Shield Settings</div>
+      <div class="subtitle">Configure your browser protection</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">Protection Settings</div>
+      
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Vanta Shield Protection</div>
+          <div class="setting-description">Enable or disable all protection features</div>
+        </div>
+        <div class="toggle active" id="enabled-toggle">
+          <div class="toggle-slider"></div>
+        </div>
+      </div>
+      
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Real-time Protection</div>
+          <div class="setting-description">Block malicious websites in real-time</div>
+        </div>
+        <div class="toggle active" id="realtime-toggle">
+          <div class="toggle-slider"></div>
+        </div>
+      </div>
+      
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Protection Indicator</div>
+          <div class="setting-description">Show protection status on legitimate websites</div>
+        </div>
+        <div class="toggle active" id="indicator-toggle">
+          <div class="toggle-slider"></div>
+        </div>
+      </div>
+      
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Warning Page</div>
+          <div class="setting-description">Show detailed warning page for blocked sites</div>
+        </div>
+        <div class="toggle active" id="warning-toggle">
+          <div class="toggle-slider"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">Statistics</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="threats-blocked">247</div>
+          <div class="stat-label">Threats Blocked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="sites-whitelisted">12</div>
+          <div class="stat-label">Sites Whitelisted</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="protection-uptime">99.9%</div>
+          <div class="stat-label">Protection Uptime</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">Actions</div>
+      <button class="button" id="reset-stats">Reset Statistics</button>
+      <button class="button secondary" id="export-settings">Export Settings</button>
+      <button class="button secondary" id="clear-whitelist">Clear Whitelist</button>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">About</div>
+      <p style="opacity: 0.8; line-height: 1.6;">
+        Vanta Shield provides advanced browser protection against malicious websites, 
+        phishing attempts, and online threats. This extension uses real-time threat 
+        intelligence to keep you safe while browsing.
+      </p>
+      <p style="opacity: 0.6; font-size: 14px;">
+        Version 1.0 • Powered by Halonex Vanta
+      </p>
+    </div>
+  </div>
+  
+  <script src="settings.js"></script>
+</body>
+</html>
