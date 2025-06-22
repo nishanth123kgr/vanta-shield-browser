@@ -1,4 +1,4 @@
-# Vanta Shield Chrome Extension
+# Halonex Vanta Chrome Extension
 
 A powerful browser security extension that protects users from malicious websites and online threats.
 
@@ -28,7 +28,7 @@ A powerful browser security extension that protects users from malicious website
 
 3. **Test the Extension**:
    - Navigate to `suspicious-banking-site.com` to see the warning page
-   - Click the Vanta Shield icon in the toolbar to see the popup
+   - Click the Halonex Vanta icon in the toolbar to see the popup
    - Visit any legitimate website to see the protection indicator
 
 ### Production Installation

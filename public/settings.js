@@ -1,4 +1,4 @@
-// Settings page script for Vanta Shield Chrome Extension
+// Settings page script for Halonex Vanta Chrome Extension
 
 document.addEventListener('DOMContentLoaded', function() {
   // Get references to elements

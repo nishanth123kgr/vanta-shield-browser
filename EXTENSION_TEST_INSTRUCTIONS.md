@@ -16,7 +16,7 @@
 ## ✅ Test Whitelist Functionality
 
 ### Test 1: Settings Page Access
-1. Click the Vanta Shield extension icon
+1. Click the Halonex Vanta extension icon
 2. Click "Settings" button
 3. **Expected**: Settings page opens successfully (no ERR_FILE_NOT_FOUND)
 4. **Expected**: "Whitelisted Sites" section is visible
@@ -35,7 +35,7 @@
 
 ### Test 4: Whitelist via Popup
 1. Navigate to any website (e.g., google.com)
-2. Click the Vanta Shield extension icon
+2. Click the Halonex Vanta extension icon
 3. Click "Whitelist This Site"
 4. **Expected**: Success message appears
 5. Go to Settings → Whitelisted Sites

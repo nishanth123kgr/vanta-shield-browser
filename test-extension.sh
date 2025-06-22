@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Chrome Extension Test Script
-echo "🛡️  Testing Vanta Shield Chrome Extension..."
+echo "🛡️  Testing Halonex Vanta Chrome Extension..."
 echo ""
 
 # Check if dist folder exists

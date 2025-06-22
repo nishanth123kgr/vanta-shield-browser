@@ -269,7 +269,7 @@ const Index = () => {
                 <div>
                   <h3 className="text-red-100 font-bold text-base mb-2">Malicious Website</h3>
                   <p className="text-red-200 text-sm leading-relaxed font-medium">
-Vanta Shield has detected that this site may be malicious. This site could be attempting phishing, malware distribution, or other harmful activities.                  </p>
+Halonex Vanta has detected that this site may be malicious. This site could be attempting phishing, malware distribution, or other harmful activities.                  </p>
 
 
 
@@ -358,7 +358,7 @@ Vanta Shield has detected that this site may be malicious. This site could be at
                 </div> */}
                 <div className="text-center">
                   <div className="text-white/90 text-sm font-semibold">
-                    Powered by <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">Halonex Vanta</span>
+                    Powered by <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">Halonex Labs</span>
                   </div>
                 </div>
               </div>

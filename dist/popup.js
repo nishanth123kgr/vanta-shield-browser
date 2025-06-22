@@ -1,4 +1,4 @@
-// Popup script for Vanta Shield Chrome Extension
+// Popup script for Halonex Vanta Chrome Extension
 // Enhanced with design principles from the main app
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -235,53 +235,65 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Enhanced status indicators for new layout
   function updateStatusIndicator(element, status, text) {
-    element.innerHTML = text;
-    element.className = `stat-value ${status}`;
+    if (element) {
+      element.innerHTML = text;
+      element.className = `stat-value ${status}`;
+    }
   }
 
   // Update protection UI based on state
   function updateProtectionUI() {
     if (isProtectionEnabled) {
-      protectionIcon.className = 'protection-status-icon active';
-      protectionTitle.className = 'protection-title active';
-      protectionTitle.textContent = 'Real-time Protection';
-      protectionSubtitle.textContent = 'All threats blocked';
+      if (protectionIcon) protectionIcon.className = 'protection-status-icon active';
+      if (protectionTitle) {
+        protectionTitle.className = 'protection-title active';
+        protectionTitle.textContent = 'Real-time Protection';
+      }
+      if (protectionSubtitle) protectionSubtitle.textContent = 'All threats blocked';
     } else {
-      protectionIcon.className = 'protection-status-icon inactive';
-      protectionTitle.className = 'protection-title inactive';
-      protectionTitle.textContent = 'Protection Disabled';
-      protectionSubtitle.textContent = 'Sites not protected';
+      if (protectionIcon) protectionIcon.className = 'protection-status-icon inactive';
+      if (protectionTitle) {
+        protectionTitle.className = 'protection-title inactive';
+        protectionTitle.textContent = 'Protection Disabled';
+      }
+      if (protectionSubtitle) protectionSubtitle.textContent = 'Sites not protected';
     }
   }
 
   // Protection toggle handler
-  protectionToggle.addEventListener('change', function() {
-    isProtectionEnabled = this.checked;
-    updateProtectionUI();
-    
-    // Save state to storage
-    if (chrome.storage) {
-      chrome.storage.local.set({ protectionEnabled: isProtectionEnabled });
-    }
-    
-    // Send message to background script
-    if (chrome.runtime) {
-      chrome.runtime.sendMessage({
-        type: 'toggleProtection',
-        enabled: isProtectionEnabled
-      });
-    }
-    
-    // Update scan button state
-    if (!isProtectionEnabled) {
-      setButtonState(scanBtn, 'disabled', 'Protection Disabled', '⚠️');
-    } else {
-      setButtonState(scanBtn, 'primary', 'Scan Current Page', '🔍');
-    }
-  });
+  if (protectionToggle) {
+    protectionToggle.addEventListener('change', function() {
+      isProtectionEnabled = this.checked;
+      updateProtectionUI();
+      
+      // Save state to storage
+      if (chrome.storage) {
+        chrome.storage.local.set({ protectionEnabled: isProtectionEnabled });
+      }
+      
+      // Send message to background script
+      if (chrome.runtime) {
+        chrome.runtime.sendMessage({
+          type: 'toggleProtection',
+          enabled: isProtectionEnabled
+        });
+      }
+      
+      // Update scan button state
+      if (scanBtn) {
+        if (!isProtectionEnabled) {
+          setButtonState(scanBtn, 'disabled', 'Protection Disabled', '⚠️');
+        } else {
+          setButtonState(scanBtn, 'primary', 'Scan Current Page', '🔍');
+        }
+      }
+    });
+  }
 
   // Enhanced button state management
   function setButtonState(button, state, text, icon = '') {
+    if (!button) return;
+    
     button.className = `button ${state}`;
     
     // Update the new button structure
@@ -301,6 +313,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Progress bar animation
   function animateProgress(targetPercent, duration = 2000) {
+    if (!scanProgressBar) return;
+    
     const startTime = Date.now();
     const startPercent = 0;
     
@@ -410,58 +424,61 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Enhanced scan functionality with protection check
-  scanBtn.addEventListener('click', function() {
-    if (!isProtectionEnabled) {
-      setButtonState(scanBtn, 'disabled', 'Enable protection first', '⚠️');
-      setTimeout(() => {
-        setButtonState(scanBtn, 'disabled', 'Protection Disabled', '⚠️');
-      }, 2000);
-      return;
-    }
-    
-    if (isScanning) return;
-    
-    isScanning = true;
-    setButtonState(scanBtn, 'primary disabled', 'Scanning', '🔄');
-    scanProgress.classList.add('active');
-    
-    // Animate progress bar
-    animateProgress(100, 2500);
-    
-    // Update last scan time
-    lastScan.textContent = 'Scanning...';
-    
-    // Simulate detailed scanning phases
-    const phases = [
-      { delay: 500, text: 'Analyzing Headers' },
-      { delay: 1000, text: 'Checking Database' },
-      { delay: 1500, text: 'Deep Scan' },
-      { delay: 2000, text: 'Finalizing' }
-    ];
-    
-    phases.forEach(phase => {
-      setTimeout(() => {
-        if (isScanning) {
-          setButtonState(scanBtn, 'primary disabled', phase.text, '🔄');
-        }
-      }, phase.delay);
-    });
-    
-    setTimeout(() => {
-      isScanning = false;
-      setButtonState(scanBtn, 'success', 'Scan Complete ✓', '✅');
-      scanProgress.classList.remove('active');
-      lastScan.textContent = 'Just Now';
+  if (scanBtn) {
+    scanBtn.addEventListener('click', function() {
+      if (!isProtectionEnabled) {
+        setButtonState(scanBtn, 'disabled', 'Enable protection first', '⚠️');
+        setTimeout(() => {
+          setButtonState(scanBtn, 'disabled', 'Protection Disabled', '⚠️');
+        }, 2000);
+        return;
+      }
       
-      // Reset button after showing success
+      if (isScanning) return;
+      
+      isScanning = true;
+      setButtonState(scanBtn, 'primary disabled', 'Scanning', '🔄');
+      if (scanProgress) scanProgress.classList.add('active');
+      
+      // Animate progress bar
+      animateProgress(100, 2500);
+      
+      // Update last scan time
+      if (lastScan) lastScan.textContent = 'Scanning...';
+      
+      // Simulate detailed scanning phases
+      const phases = [
+        { delay: 500, text: 'Analyzing Headers' },
+        { delay: 1000, text: 'Checking Database' },
+        { delay: 1500, text: 'Deep Scan' },
+        { delay: 2000, text: 'Finalizing' }
+      ];
+      
+      phases.forEach(phase => {
+        setTimeout(() => {
+          if (isScanning) {
+            setButtonState(scanBtn, 'primary disabled', phase.text, '🔄');
+          }
+        }, phase.delay);
+      });
+      
       setTimeout(() => {
-        setButtonState(scanBtn, 'primary', 'Scan Current Page', '🔍');
-      }, 2500);
-    }, 2800);
-  });
+        isScanning = false;
+        setButtonState(scanBtn, 'success', 'Scan Complete ✓', '✅');
+        if (scanProgress) scanProgress.classList.remove('active');
+        if (lastScan) lastScan.textContent = 'Just Now';
+        
+        // Reset button after showing success
+        setTimeout(() => {
+          setButtonState(scanBtn, 'primary', 'Scan Current Page', '🔍');
+        }, 2500);
+      }, 2800);
+    });
+  }
 
   // Enhanced whitelist functionality
-  whitelistBtn.addEventListener('click', function() {
+  if (whitelistBtn) {
+    whitelistBtn.addEventListener('click', function() {
     console.log('Whitelist button clicked, currentDomain:', currentDomain);
     
     if (!currentDomain || currentDomain === 'Unknown' || currentDomain === 'Invalid URL') {
@@ -520,10 +537,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 2500);
       }, 800);
     }
-  });
+    });
+  }
 
   // Enhanced settings navigation
-  settingsBtn.addEventListener('click', function() {
+  if (settingsBtn) {
+    settingsBtn.addEventListener('click', function() {
     console.log('Settings button clicked');
     setButtonState(settingsBtn, 'disabled', 'Opening...', '🔄');
     
@@ -561,10 +580,12 @@ document.addEventListener('DOMContentLoaded', function() {
         setButtonState(settingsBtn, '', 'Settings', '⚙️');
       }, 2000);
     }
-  });
+    });
+  }
 
   // Enhanced report functionality
-  reportBtn.addEventListener('click', function() {
+  if (reportBtn) {
+    reportBtn.addEventListener('click', function() {
     const originalContent = reportBtn.innerHTML;
     setButtonState(reportBtn, 'primary disabled', 'Sending Report', '📤');
     
@@ -577,7 +598,8 @@ document.addEventListener('DOMContentLoaded', function() {
         reportBtn.className = 'button';
       }, 2500);
     }, 1200);
-  });
+    });
+  }
 
   // Add keyboard shortcuts
   document.addEventListener('keydown', function(e) {
@@ -585,7 +607,7 @@ document.addEventListener('DOMContentLoaded', function() {
       window.close();
     } else if (e.key === 's' && e.ctrlKey) {
       e.preventDefault();
-      if (!isScanning) {
+      if (!isScanning && scanBtn) {
         scanBtn.click();
       }
     }
@@ -593,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Periodic status updates (simulating real-time protection)
   setInterval(() => {
-    if (!isScanning) {
+    if (!isScanning && blockedCount) {
       // Randomly update blocked count to show active protection
       const currentCount = parseInt(blockedCount.textContent.match(/\d+/)?.[0] || '247');
       if (Math.random() < 0.1) { // 10% chance every 5 seconds

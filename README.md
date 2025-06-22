@@ -1,4 +1,4 @@
-# Vanta Shield Browser Protection
+# Halonex Vanta Protection
 
 A powerful React-based security solution that can run as both a web application and Chrome extension to protect users from malicious websites and online threats.
 
@@ -15,7 +15,7 @@ Then load the `dist` folder as an unpacked extension in Chrome.
 
 ## ✅ Whitelist Management
 
-Vanta Shield now includes comprehensive whitelist functionality:
+Halonex Vanta now includes comprehensive whitelist functionality:
 
 ### Features:
 - **Settings Page Management**: Add, view, and remove whitelisted domains

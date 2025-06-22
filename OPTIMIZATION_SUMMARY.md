@@ -1,4 +1,4 @@
-# Vanta Shield Extension Optimizations
+# Halonex Vanta Extension Optimizations
 
 ## 🚀 Performance & Security Improvements
 

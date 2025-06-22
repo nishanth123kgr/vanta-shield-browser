@@ -312,7 +312,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-3">
+    <div className="min-h-screen relative flex items-center justify-center p-10">
       {/* Animated Background */}
       <AnimatedBackground />
 
@@ -365,7 +365,7 @@ const Settings = () => {
                   </div>
                   <div>
                     <CardTitle className="text-2xl font-bold text-white">Settings</CardTitle>
-                    <p className="text-white/70 text-sm">Configure your Vanta Shield protection</p>
+                    <p className="text-white/70 text-sm">Configure your Halonex Vanta protection</p>
                   </div>
                 </div>
               </CardHeader>
@@ -526,7 +526,7 @@ const Settings = () => {
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label className="text-white/90 font-medium">Collect Analytics</Label>
-                    <p className="text-sm text-white/60">Help improve Vanta Shield with usage data</p>
+                    <p className="text-sm text-white/60">Help improve Halonex Vanta with usage data</p>
                   </div>
                   <Switch
                     checked={settings.collectAnalytics}
@@ -575,7 +575,7 @@ const Settings = () => {
               <div className="flex items-center justify-center">
                 <div className="text-center">
                   <div className="text-white/90 text-sm font-semibold">
-                    Powered by <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">Halonex Vanta</span>
+                    Powered by <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">Halonex Labs</span>
                   </div>
                 </div>
               </div>

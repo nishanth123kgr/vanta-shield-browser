@@ -1,7 +1,7 @@
 # Whitelist Functionality Documentation
 
 ## Overview
-The Vanta Shield browser extension now supports comprehensive whitelist management, allowing users to manage trusted domains that will never be blocked by the security system.
+The Halonex Vanta extension now supports comprehensive whitelist management, allowing users to manage trusted domains that will never be blocked by the security system.
 
 ## Changes Made
 
@@ -69,7 +69,7 @@ const [isAddingDomain, setIsAddingDomain] = useState(false);
 ### For Users:
 
 #### Via Settings Page:
-1. Open Vanta Shield settings
+1. Open Halonex Vanta settings
 2. Navigate to "Whitelisted Sites" section
 3. Enter domain name (e.g., "example.com")
 4. Click the "+" button to add
@@ -77,7 +77,7 @@ const [isAddingDomain, setIsAddingDomain] = useState(false);
 
 #### Via Browser Popup:
 1. Navigate to the site you want to whitelist
-2. Click the Vanta Shield extension icon
+2. Click the Halonex Vanta extension icon
 3. Click "Whitelist This Site" button
 4. Confirmation message will appear
 

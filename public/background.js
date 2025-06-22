@@ -1,5 +1,5 @@
-// Background script for Vanta Shield Chrome Extension
-console.log('Vanta Shield background script loaded');
+// Background script for Halonex Vanta Chrome Extension
+console.log('Halonex Vanta background script loaded');
 
 // Store blocked attempts counter
 let blockedAttempts = 0;
@@ -343,7 +343,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Initialize extension
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('Vanta Shield extension installed');
+  console.log('Halonex Vanta extension installed');
   
   // Set initial storage values
   chrome.storage.local.set({
@@ -355,7 +355,7 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.get("enabled", (data) => {
     if (data.enabled === undefined) {
       chrome.storage.sync.set({ "enabled": true });
-      console.log('Vanta Shield protection enabled by default');
+      console.log('Halonex Vanta protection enabled by default');
     }
   });
 });

@@ -1,7 +1,7 @@
-# Vanta Shield Settings Implementation
+# Halonex Vanta Settings Implementation
 
 ## Overview
-A modern React-based settings page has been created for the Vanta Shield browser extension, following the same design principles as the main warning page.
+A modern React-based settings page has been created for the Halonex Vanta extension, following the same design principles as the main warning page.
 
 ## Features
 
@@ -15,7 +15,7 @@ A modern React-based settings page has been created for the Vanta Shield browser
 - **Auto-Whitelist Trusted Sites**: Automatically allow frequently visited safe sites
 
 ### 🔒 Privacy & Data
-- **Collect Analytics**: Help improve Vanta Shield with usage data
+- **Collect Analytics**: Help improve Halonex Vanta with usage data
 - **Debug Mode**: Enable detailed logging for troubleshooting
 
 ## Technical Implementation
@@ -55,7 +55,7 @@ A modern React-based settings page has been created for the Vanta Shield browser
 3. Access settings via:
    - Extension popup → Settings button
    - Right-click extension icon → Options
-   - Chrome extensions page → Vanta Shield → Details → Extension options
+   - Chrome extensions page → Halonex Vanta → Details → Extension options
 
 ### Settings Persistence:
 - All settings are automatically saved when changed

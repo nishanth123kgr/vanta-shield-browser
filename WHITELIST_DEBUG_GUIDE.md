@@ -11,7 +11,7 @@ npm run build && cp -r public/* dist/
 
 # In Chrome:
 # 1. Go to chrome://extensions/
-# 2. Remove old Vanta Shield extension
+# 2. Remove old Halonex Vanta extension
 # 3. Load unpacked: select dist/ folder
 ```
 
@@ -24,7 +24,7 @@ npm run build && cp -r public/* dist/
 
 **Background Script Console:**
 1. Open `chrome://extensions/`
-2. Click "Inspect views: background page" for Vanta Shield
+2. Click "Inspect views: background page" for Halonex Vanta
 3. Watch console for debug logs when:
    - Adding domains
    - Getting domains
@@ -46,7 +46,7 @@ Navigate to: `chrome-extension://[extension-id]/debug-whitelist.html`
 
 #### 5. **Manual Storage Inspection**
 1. Open Chrome DevTools (F12)
-2. Go to: Application → Storage → Extensions → [Vanta Shield ID]
+2. Go to: Application → Storage → Extensions → [Halonex Vanta ID]
 3. Look for keys like: `vanta_[hash]` with domain values
 
 ### 🔧 **Expected Debug Output:**

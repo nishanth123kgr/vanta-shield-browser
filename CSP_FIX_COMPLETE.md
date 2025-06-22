@@ -19,7 +19,7 @@
 ### 1. **Reload Extension**
 ```
 1. Go to chrome://extensions/
-2. Remove old Vanta Shield extension  
+2. Remove old Halonex Vanta extension  
 3. Load unpacked: select dist/ folder
 4. Verify extension loads without errors
 ```
