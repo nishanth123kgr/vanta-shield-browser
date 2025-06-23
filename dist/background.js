@@ -1,19 +1,24 @@
 // Background script for Halonex Vanta Chrome Extension
 console.log('Halonex Vanta background script loaded');
 
-// Store blocked attempts counter
+// Store blocked attempts counter and protection state
 let blockedAttempts = 0;
 let blockedToday = 0;
 let totalThreatsBlocked = 0;
 let lastResetDate = null;
+let isProtectionEnabled = true; // Default to enabled
 
 // Cache duration in milliseconds (24 hours)
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
-// Initialize counters from storage
-chrome.storage.local.get(['blockedToday', 'totalThreatsBlocked', 'lastResetDate'], (result) => {
+// Initialize protection state and counters from storage
+chrome.storage.local.get(['blockedToday', 'totalThreatsBlocked', 'lastResetDate', 'protectionEnabled'], (result) => {
   const today = new Date().toDateString();
   lastResetDate = result.lastResetDate || today;
+  
+  // Initialize protection state
+  isProtectionEnabled = result.protectionEnabled !== undefined ? result.protectionEnabled : true;
+  console.log('Protection enabled:', isProtectionEnabled);
   
   // Reset daily counter if it's a new day
   if (lastResetDate !== today) {
@@ -27,7 +32,7 @@ chrome.storage.local.get(['blockedToday', 'totalThreatsBlocked', 'lastResetDate'
   }
   
   totalThreatsBlocked = result.totalThreatsBlocked || 0;
-  console.log(`Initialized: Today: ${blockedToday}, Total: ${totalThreatsBlocked}`);
+  console.log(`Initialized: Today: ${blockedToday}, Total: ${totalThreatsBlocked}, Protection: ${isProtectionEnabled}`);
 });
 
 // Function to increment threat counters
@@ -156,10 +161,20 @@ async function cacheThreatStatus(hashedHostname, isThreat) {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status !== "loading" || !tab.url.startsWith("http")) return;
 
-  chrome.storage.sync.get("enabled", async (data) => {
-    if (data.enabled === false) return;
+  // Double-check protection state from storage to ensure we have the latest value
+  const storageResult = await new Promise(resolve => {
+    chrome.storage.local.get(['protectionEnabled'], resolve);
+  });
+  
+  const currentProtectionState = storageResult.protectionEnabled !== undefined ? storageResult.protectionEnabled : true;
+  
+  // Check if protection is enabled
+  if (!currentProtectionState) {
+    console.log('Protection disabled - skipping domain check for:', tab.url);
+    return;
+  }
 
-    try {
+  try {
       const hostName = new URL(tab.url).hostname;
       
       // Skip special cases and invalid hostnames
@@ -219,7 +234,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     } catch (error) {
       console.error('Error in tab update listener:', error);
     }
-  });
 });
 
 // Handle messages from content script and popup
@@ -297,9 +311,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   
   if (request.type === 'checkDomain') {
-    // Check domain using whitelist, cache, then API
+    // Check domain using whitelist, cache, then API - but only if protection is enabled
     (async () => {
       try {
+        // If protection is disabled, always return false (safe)
+        if (!isProtectionEnabled) {
+          console.log('Protection disabled - allowing all domains');
+          sendResponse({ isMalicious: false });
+          return;
+        }
+        
         const hashedHostname = await hashHostname(request.domain);
         
         // Check whitelist first
@@ -329,6 +350,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ isMalicious: false });
       }
     })();
+    return true; // Will respond asynchronously
+  }
+  
+  // Handle protection state management
+  if (request.type === 'getProtectionState') {
+    sendResponse({ enabled: isProtectionEnabled });
+  }
+  
+  if (request.type === 'setProtectionState') {
+    isProtectionEnabled = request.enabled;
+    chrome.storage.local.set({ protectionEnabled: isProtectionEnabled }, () => {
+      console.log('Protection state updated:', isProtectionEnabled);
+      sendResponse({ success: true });
+    });
     return true; // Will respond asynchronously
   }
   

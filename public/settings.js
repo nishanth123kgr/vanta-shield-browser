@@ -30,10 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
   clearWhitelistBtn.addEventListener('click', clearWhitelist);
 
   function loadSettings() {
-    // Load global enabled setting from sync storage
-    chrome.storage.sync.get(['enabled'], (result) => {
-      updateToggleState(enabledToggle, result.enabled !== false);
-    });
+    // Load protection state from background script
+    if (chrome.runtime) {
+      chrome.runtime.sendMessage({ type: 'getProtectionState' }, (response) => {
+        if (response && response.enabled !== undefined) {
+          updateToggleState(enabledToggle, response.enabled);
+          console.log('Loaded protection state from background:', response.enabled);
+        }
+      });
+    } else {
+      // Fallback: Load global enabled setting from local storage
+      chrome.storage.local.get(['protectionEnabled'], (result) => {
+        updateToggleState(enabledToggle, result.protectionEnabled !== false);
+      });
+    }
     
     // Load other settings from local storage
     chrome.storage.local.get(['vanta_realtime', 'vanta_indicator', 'vanta_warning'], (result) => {
@@ -83,16 +93,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     updateToggleState(toggleElement, newState);
     
-    // Save global setting to sync storage
-    const data = {};
-    data[setting] = newState;
-    chrome.storage.sync.set(data);
-    
-    console.log(`Global ${setting} setting: ${newState}`);
-    
-    // Show notification about protection status
+    // Handle protection setting specifically
     if (setting === 'enabled') {
-      showNotification(newState ? 'Protection Enabled' : 'Protection Disabled');
+      // Send to background script
+      if (chrome.runtime) {
+        chrome.runtime.sendMessage({
+          type: 'setProtectionState',
+          enabled: newState
+        }, (response) => {
+          if (response && response.success) {
+            console.log('Protection state updated in background script');
+            showNotification(newState ? 'Protection Enabled' : 'Protection Disabled');
+          }
+        });
+      }
+      
+      // Also save to local storage for backward compatibility
+      chrome.storage.local.set({ protectionEnabled: newState });
+    } else {
+      // Save other global settings to sync storage
+      const data = {};
+      data[setting] = newState;
+      chrome.storage.sync.set(data);
+      console.log(`Global ${setting} setting: ${newState}`);
     }
   }
 

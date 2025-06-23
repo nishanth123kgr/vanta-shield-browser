@@ -10,6 +10,18 @@ if (currentDomain &&
     !window.location.href.startsWith('moz-extension://') &&
     !window.location.href.startsWith('about:') &&
     !window.location.href.startsWith('file://')) {
+  
+  // Check if protection is enabled before showing indicator
+  if (chrome.runtime) {
+    chrome.runtime.sendMessage({ type: 'getProtectionState' }, (response) => {
+      if (response && response.enabled) {
+        showProtectionIndicator();
+      }
+    });
+  }
+}
+
+function showProtectionIndicator() {
   // Add a small protection indicator
   const indicator = document.createElement('div');
   indicator.id = 'vanta-shield-indicator';

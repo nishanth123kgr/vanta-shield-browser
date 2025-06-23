@@ -279,6 +279,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
       
+      // Update footer status
+      updateFooterStatus();
+      
       // Update scan button state
       if (scanBtn) {
         if (!isProtectionEnabled) {
@@ -405,22 +408,23 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Chrome tabs API not available:', error);
   }
 
-  // Get blocked attempts count with enhanced display
+  // Get real blocked attempts count
   chrome.runtime.sendMessage({
     type: 'getBlockedAttempts'
   }, (response) => {
     if (chrome.runtime.lastError) {
-      // Fallback for when extension context is unavailable
-      updateStatusIndicator(blockedCount, 'blocked', '0');
+      // Fallback when extension context is unavailable
+      updateThreatCounters(0, 0);
       return;
     }
     
     if (response && typeof response.count !== 'undefined') {
-      updateStatusIndicator(blockedCount, 'blocked', response.count.toString());
-    } else {
-      // Simulate some blocked attempts for demo
-      updateStatusIndicator(blockedCount, 'blocked', '0');
+      // Use real blocked count data, but get full stats separately
+      currentBlockedToday = response.count;
     }
+    
+    // Get comprehensive threat statistics
+    getRealThreatData();
   });
 
   // Enhanced scan functionality with protection check
@@ -613,14 +617,59 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Periodic status updates (simulating real-time protection)
-  setInterval(() => {
-    if (!isScanning && blockedCount) {
-      // Randomly update blocked count to show active protection
-      const currentCount = parseInt(blockedCount.textContent.match(/\d+/)?.[0] || '247');
-      if (Math.random() < 0.1) { // 10% chance every 5 seconds
-        updateStatusIndicator(blockedCount, 'blocked', (currentCount + 1).toString());
+  // Minimal footer status update
+  function updateFooterStatus() {
+    const statusDot = document.querySelector('.status-dot');
+    const statusLabel = document.querySelector('.status-label');
+    
+    if (statusDot && statusLabel) {
+      if (isProtectionEnabled) {
+        statusDot.className = 'status-dot active';
+        statusLabel.textContent = 'ACTIVE';
+      } else {
+        statusDot.className = 'status-dot inactive';
+        statusLabel.textContent = 'DISABLED';
       }
     }
+  }
+
+  let currentBlockedToday = 0;
+  let currentTotalThreats = 0;
+
+  // Initialize footer status
+  updateFooterStatus();
+
+  // Function to update threat counters with real data
+  function updateThreatCounters(blockedToday, totalThreats) {
+    currentBlockedToday = blockedToday;
+    currentTotalThreats = totalThreats;
+    
+    updateStatusIndicator(blockedCount, 'blocked', currentBlockedToday.toString());
+    updateStatusIndicator(totalThreats, 'blocked', currentTotalThreats.toString());
+  }
+
+  // Function to get real threat data from background script
+  function getRealThreatData() {
+    if (chrome.runtime) {
+      chrome.runtime.sendMessage({
+        type: 'getThreatStats'
+      }, (response) => {
+        if (response && !chrome.runtime.lastError) {
+          updateThreatCounters(
+            response.blockedToday || 0,
+            response.totalThreatsBlocked || 0
+          );
+        }
+      });
+    }
+  }
+
+  // Periodic status updates with real data
+  setInterval(() => {
+    // Get real threat data every 5 seconds
+    getRealThreatData();
+    
+    // Update footer status
+    updateFooterStatus();
   }, 5000);
 });

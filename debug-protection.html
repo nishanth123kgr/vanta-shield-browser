@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vanta Protection Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .enabled { background: #d4edda; color: #155724; }
+        .disabled { background: #f8d7da; color: #721c24; }
+        button { padding: 10px 20px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Vanta Protection State Debug</h1>
+    
+    <div id="status" class="status">Loading...</div>
+    
+    <button onclick="checkState()">Check Protection State</button>
+    <button onclick="enableProtection()">Enable Protection</button>
+    <button onclick="disableProtection()">Disable Protection</button>
+    <button onclick="checkStorage()">Check Storage</button>
+    
+    <div id="logs" style="margin-top: 20px;">
+        <h3>Logs:</h3>
+        <pre id="logOutput" style="background: #f5f5f5; padding: 10px; border-radius: 5px;"></pre>
+    </div>
+
+    <script>
+        function log(message) {
+            const logOutput = document.getElementById('logOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            logOutput.textContent += `[${timestamp}] ${message}\n`;
+        }
+
+        function updateStatus(enabled) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = `Protection is ${enabled ? 'ENABLED' : 'DISABLED'}`;
+            statusDiv.className = `status ${enabled ? 'enabled' : 'disabled'}`;
+        }
+
+        async function checkState() {
+            log('Checking protection state...');
+            
+            if (chrome && chrome.runtime) {
+                try {
+                    chrome.runtime.sendMessage({ type: 'getProtectionState' }, (response) => {
+                        if (response) {
+                            log(`Background script response: ${JSON.stringify(response)}`);
+                            updateStatus(response.enabled);
+                        } else {
+                            log('No response from background script');
+                        }
+                    });
+                } catch (error) {
+                    log(`Error communicating with background: ${error.message}`);
+                }
+            } else {
+                log('Chrome extension APIs not available');
+            }
+        }
+
+        async function enableProtection() {
+            log('Enabling protection...');
+            if (chrome && chrome.runtime) {
+                chrome.runtime.sendMessage({ type: 'setProtectionState', enabled: true }, (response) => {
+                    log(`Enable response: ${JSON.stringify(response)}`);
+                    checkState();
+                });
+            }
+        }
+
+        async function disableProtection() {
+            log('Disabling protection...');
+            if (chrome && chrome.runtime) {
+                chrome.runtime.sendMessage({ type: 'setProtectionState', enabled: false }, (response) => {
+                    log(`Disable response: ${JSON.stringify(response)}`);
+                    checkState();
+                });
+            }
+        }
+
+        function checkStorage() {
+            log('Checking local storage...');
+            if (chrome && chrome.storage) {
+                chrome.storage.local.get(['protectionEnabled'], (result) => {
+                    log(`Storage result: ${JSON.stringify(result)}`);
+                });
+            } else {
+                log('Chrome storage API not available');
+            }
+        }
+
+        // Check state on load
+        window.onload = () => {
+            log('Page loaded, checking initial state...');
+            checkState();
+            checkStorage();
+        };
+    </script>
+</body>
+</html>

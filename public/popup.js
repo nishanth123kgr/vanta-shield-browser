@@ -43,8 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize container immediately
   document.querySelector('.container').style.opacity = '1';
 
-  // Load protection state from storage
-  if (chrome.storage) {
+  // Load protection state from background script
+  if (chrome.runtime) {
+    chrome.runtime.sendMessage({ type: 'getProtectionState' }, (response) => {
+      if (response && response.enabled !== undefined) {
+        isProtectionEnabled = response.enabled;
+        protectionToggle.checked = isProtectionEnabled;
+        updateProtectionUI();
+        console.log('Loaded protection state from background:', isProtectionEnabled);
+      }
+    });
+  } else {
+    // Fallback: Load from storage if runtime not available
     chrome.storage.local.get(['protectionEnabled'], (result) => {
       if (result.protectionEnabled !== undefined) {
         isProtectionEnabled = result.protectionEnabled;
@@ -264,18 +274,25 @@ document.addEventListener('DOMContentLoaded', function() {
       isProtectionEnabled = this.checked;
       updateProtectionUI();
       
-      // Save state to storage
+      // Send state to background script first
+      if (chrome.runtime) {
+        chrome.runtime.sendMessage({
+          type: 'setProtectionState',
+          enabled: isProtectionEnabled
+        }, (response) => {
+          if (response && response.success) {
+            console.log('Protection state updated in background script');
+          }
+        });
+      }
+      
+      // Also save to local storage for backward compatibility
       if (chrome.storage) {
         chrome.storage.local.set({ protectionEnabled: isProtectionEnabled });
       }
       
-      // Send message to background script
-      if (chrome.runtime) {
-        chrome.runtime.sendMessage({
-          type: 'toggleProtection',
-          enabled: isProtectionEnabled
-        });
-      }
+      // Update footer status
+      updateFooterStatus();
       
       // Update scan button state
       if (scanBtn) {
@@ -285,6 +302,9 @@ document.addEventListener('DOMContentLoaded', function() {
           setButtonState(scanBtn, 'primary', 'Scan Current Page', '🔍');
         }
       }
+      
+      // Update footer status
+      updateFooterStatus();
     });
   }
 
@@ -534,6 +554,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // Footer status management
+  function updateFooterStatus() {
+    const statusIndicator = document.querySelector('.status-indicator');
+    const statusText = document.querySelector('.status-text');
+    
+    if (statusIndicator && statusText) {
+      if (isProtectionEnabled) {
+        statusIndicator.className = 'status-indicator active';
+        statusText.textContent = 'ACTIVE';
+      } else {
+        statusIndicator.className = 'status-indicator inactive';
+        statusText.textContent = 'DISABLED';
+      }
+    }
+  }
+
+  // Update footer status on protection toggle
+  function updateProtectionState(enabled) {
+    isProtectionEnabled = enabled;
+    protectionToggle.checked = enabled;
+    
+    // Update protection UI
+    updateProtectionUI();
+    
+    // Update footer status
+    updateFooterStatus();
+  }
+
+  // Initialize footer status
+  updateFooterStatus();
+
   // Periodic status updates (simulating real-time protection)
   setInterval(() => {
     if (!isScanning && blockedCount) {
@@ -543,5 +594,8 @@ document.addEventListener('DOMContentLoaded', function() {
         updateStatusIndicator(blockedCount, 'blocked', (currentCount + 1).toString());
       }
     }
+    
+    // Update footer status periodically
+    updateFooterStatus();
   }, 5000);
 });
