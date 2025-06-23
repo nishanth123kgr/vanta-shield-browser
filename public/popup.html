@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,24 +8,32 @@
   <style>
     /* Keyframes */
     @keyframes float {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: translate(0, 0) scale(1);
       }
+
       25% {
         transform: translate(20px, -30px) scale(1.05);
       }
+
       50% {
         transform: translate(-15px, 20px) scale(0.95);
       }
+
       75% {
         transform: translate(25px, 10px) scale(1.02);
       }
     }
 
     @keyframes pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         opacity: 1;
       }
+
       50% {
         opacity: 0.5;
       }
@@ -35,6 +44,7 @@
         opacity: 0;
         transform: translateY(10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -42,15 +52,15 @@
     }
 
     body {
-    
       width: 380px;
-      /* height: 600px; */
+      /* min-height: 600px; */
       margin: 0;
       padding: 0;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #000000 100%);
       color: white;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       position: relative;
       border-radius: 16px;
     }
@@ -106,25 +116,67 @@
     .mesh-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, transparent 50%, rgba(0,0,0,0.2) 100%);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%);
     }
-    
+
     .container {
-      padding: 18px;
-      height: 100%;
+      padding: 18px 18px 24px;
+      /* min-height: calc(100vh - 36px); */
       display: flex;
       flex-direction: column;
       position: relative;
       z-index: 10;
       border-radius: 16px;
-      overflow: hidden;
-      opacity: 1; /* Remove animation flicker */
+      opacity: 1;
+      /* Remove animation flicker */
     }
-    
+
     .header {
       text-align: center;
       margin-bottom: 20px;
       flex-shrink: 0;
+    }
+
+    .version-info {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.4);
+      z-index: 20;
+    }
+
+    .settings-button {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      padding: 4px; /* Increased from 2px to 4px for better balance */
+      border-radius: 3px;
+      transition: all 0.2s ease;
+      z-index: 20;
+      font-size: 10px; /* Back to 10px from 8px */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .settings-button i {
+      width: 16px; /* Increased from 10px to 14px */
+      height: 16px; /* Increased from 10px to 14px */
+    }
+
+    .settings-button svg {
+      width: 16px; /* Increased from 10px to 14px */
+      height: 16px; /* Increased from 10px to 14px */
+    }
+
+    .settings-button:hover {
+      color: rgba(255, 255, 255, 1);
     }
 
     .logo img {
@@ -133,6 +185,7 @@
       filter: brightness(0) invert(1);
       opacity: 0.95;
     }
+
     .status-card {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
       backdrop-filter: blur(20px);
@@ -154,7 +207,7 @@
       inset: 0;
       border-radius: 20px;
       padding: 1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent, rgba(255,255,255,0.1));
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent, rgba(255, 255, 255, 0.1));
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask-composite: xor;
       pointer-events: none;
@@ -266,12 +319,12 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    input:checked + .toggle-slider {
+    input:checked+.toggle-slider {
       background: linear-gradient(135deg, #10b981, #059669);
       border-color: #10b981;
     }
 
-    input:checked + .toggle-slider:before {
+    input:checked+.toggle-slider:before {
       transform: translateX(24px);
     }
 
@@ -352,7 +405,7 @@
       word-break: break-all;
       color: #60a5fa;
     }
-    
+
     .status-value.protected {
       color: #10b981;
     }
@@ -361,7 +414,7 @@
       background: #10b981;
       animation: pulse 2s infinite;
     }
-    
+
     .status-value.blocked {
       color: #ef4444;
     }
@@ -379,204 +432,7 @@
       background: #f59e0b;
       animation: pulse 2s infinite;
     }
-    
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    
-    /* Action Buttons - Using Stat Item Styles */
-    .button {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 10px 8px;
-      transition: all 0.2s ease;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      color: white;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      height: auto;
-      min-height: auto;
-    }
 
-    /* Glass shine effect */
-    .button::before {
-      display: none; /* Remove custom shine effect */
-    }
-
-    .button:hover::before {
-      display: none; /* Remove custom shine effect */
-    }
-
-    .button-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      width: 100%;
-      height: 100%;
-    }
-
-    .button-icon {
-      font-size: 16px;
-      line-height: 1;
-      opacity: 0.9;
-      margin-bottom: 2px;
-    }
-
-    .button-text {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 1px;
-    }
-
-    .button-title {
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 1.2;
-      opacity: 0.9;
-    }
-
-    .button-subtitle {
-      font-size: 9px;
-      opacity: 0.6;
-      font-weight: 400;
-      line-height: 1.2;
-      display: none; /* Hide subtitle to keep compact like status cards */
-    }
-
-    .button-action {
-      display: none; /* Remove arrow to match status card style */
-    }
-
-    /* Button Hover Effects - Matching Stat Item Style */
-    .button:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
-      transform: translateY(-1px);
-    }
-
-    .button:active {
-      transform: translateY(0);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    /* Button Content Styling */
-
-    .button:hover .button-action {
-      color: rgba(255, 255, 255, 0.7);
-      transform: translateX(2px);
-    }
-
-    .button:active {
-      transform: translateY(0px);
-      transition: transform 0.1s ease;
-    }
-
-    /* Specific Button Styles */
-    .button.whitelist {
-      border-color: rgba(34, 197, 94, 0.2);
-    }
-
-    .button.whitelist .button-icon {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(21, 128, 61, 0.1));
-      border-color: rgba(34, 197, 94, 0.25);
-      color: #22c55e;
-    }
-
-    .button.whitelist:hover {
-      border-color: rgba(34, 197, 94, 0.3);
-      background: rgba(34, 197, 94, 0.05);
-    }
-
-    .button.settings {
-      border-color: rgba(99, 102, 241, 0.2);
-      padding: 6px 6px; /* Reduced from 10px 8px */
-      min-height: auto;
-      height: auto;
-    }
-
-    .button.settings .button-icon {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(67, 56, 202, 0.1));
-      border-color: rgba(99, 102, 241, 0.25);
-      color: #6366f1;
-      font-size: 14px; /* Reduced from 16px */
-      margin-bottom: 1px; /* Reduced from 2px */
-    }
-
-    .button.settings .button-title {
-      font-size: 10px; /* Reduced from 11px */
-      font-weight: 600;
-      line-height: 1.2;
-      opacity: 0.9;
-    }
-
-    .button.settings .button-content {
-      gap: 2px; /* Reduced from 4px */
-    }
-
-    .button.settings:hover {
-      border-color: rgba(99, 102, 241, 0.3);
-      background: rgba(99, 102, 241, 0.05);
-    }
-
-    .button.report {
-      border-color: rgba(249, 115, 22, 0.2);
-    }
-
-    .button.report .button-icon {
-      background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(194, 65, 12, 0.1));
-      border-color: rgba(249, 115, 22, 0.25);
-      color: #f97316;
-    }
-
-    .button.report:hover {
-      border-color: rgba(249, 115, 22, 0.3);
-      background: rgba(249, 115, 22, 0.05);
-    }
-
-    /* Button States - Following Stat Item Color System */
-    .button.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      background: rgba(255, 255, 255, 0.03);
-      border-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .button.success {
-      background: rgba(34, 197, 94, 0.1);
-      border-color: rgba(34, 197, 94, 0.2);
-      color: #22c55e;
-    }
-
-    .button.danger {
-      background: rgba(239, 68, 68, 0.1);
-      border-color: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-    }
-
-    .button.warning {
-      background: rgba(245, 158, 11, 0.1);
-      border-color: rgba(245, 158, 11, 0.2);
-      color: #f59e0b;
-    }
-
-    .button.disabled:hover {
-      transform: none;
-      background: rgba(255, 255, 255, 0.03);
-      border-color: rgba(255, 255, 255, 0.05);
-    }
 
     /* Stat Item Hover - Following Status Card Pattern */
     .stat-item:hover {
@@ -596,155 +452,115 @@
     }
 
     @keyframes dots {
-      0%, 20% {
+
+      0%,
+      20% {
         content: '';
       }
+
       40% {
         content: '.';
       }
+
       60% {
         content: '..';
       }
-      80%, 100% {
+
+      80%,
+      100% {
         content: '...';
       }
     }
 
     /* Footer Styles */
     .footer {
-      margin-top: 12px;
-      padding: 0;
-      text-align: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 0 0 20px 20px;
+      /* margin-top: auto; */
+      padding: 12px 16px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
       position: relative;
       flex-shrink: 0;
+      z-index: 15;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
       overflow: hidden;
     }
 
     .footer::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      inset: 0;
+      border-radius: 0 0 20px 20px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent, rgba(255, 255, 255, 0.08));
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: xor;
+      pointer-events: none;
     }
 
-    .footer-content {
+    .footer-minimal {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
       position: relative;
+      z-index: 1;
     }
 
     .footer-brand {
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .footer-logo {
-      font-size: 14px;
-      filter: drop-shadow(0 0 4px rgba(147, 51, 234, 0.4));
-      animation: pulse 3s ease-in-out infinite;
-    }
-
-    .footer-text {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1px;
-    }
-
-    .footer-tagline {
-      font-size: 8px;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.8);
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      line-height: 1;
+      letter-spacing: 1px;
     }
 
-    .footer-version {
-      font-size: 7px;
-      font-weight: 400;
-      color: rgba(255, 255, 255, 0.3);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      line-height: 1;
+    .footer-icon {
+      width: 24px;
+      height: 24px;
+      /* filter: brightness(0) invert(1); */
+      /* opacity: 0.8; */
     }
 
     .footer-status {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
 
-    .status-indicator {
+    .status-dot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background: #22c55e;
-      box-shadow: 
-        0 0 4px rgba(34, 197, 94, 0.4),
-        0 0 8px rgba(34, 197, 94, 0.2);
-      animation: pulse-dot 2s ease-in-out infinite;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+      animation: pulse-minimal 2s ease-in-out infinite;
     }
 
-    .status-indicator.active {
-      background: #22c55e;
-      box-shadow: 
-        0 0 4px rgba(34, 197, 94, 0.6),
-        0 0 8px rgba(34, 197, 94, 0.3),
-        0 0 12px rgba(34, 197, 94, 0.1);
-    }
-
-    .status-indicator.inactive {
+    .status-dot.inactive {
       background: #ef4444;
-      box-shadow: 
-        0 0 4px rgba(239, 68, 68, 0.6),
-        0 0 8px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
     }
 
-    .status-text {
-      font-size: 7px;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.5);
+    .status-label {
+      font-size: 9px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.5px;
     }
 
-    @keyframes pulse-dot {
-      0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.7;
-        transform: scale(1.1);
-      }
-    }
-
-    /* Hover effect for footer */
-    .footer:hover .footer-logo {
-      filter: drop-shadow(0 0 6px rgba(147, 51, 234, 0.6));
-      transform: scale(1.05);
-    }
-
-    .footer:hover .status-indicator {
-      animation-duration: 1s;
-    }
-
-    .footer:hover .footer-tagline {
-      color: rgba(255, 255, 255, 0.8);
+    @keyframes pulse-minimal {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
     }
   </style>
 </head>
+
 <body>
   <!-- Animated Background -->
   <div class="animated-background">
@@ -755,13 +571,32 @@
     <div class="mesh-overlay"></div>
   </div>
 
+  <!-- Version info in top left -->
+  <div class="version-info">
+    HALONEX VANTA v1.0
+  </div>
+
+  <!-- Settings button in top right -->
+  <button class="settings-button .text-white/60 text-sm" id="settings-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings h-4 w-4"
+      data-lov-id="src/pages/Index.tsx:194:10" data-lov-name="Settings" data-component-path="src/pages/Index.tsx"
+      data-component-line="194" data-component-file="Index.tsx" data-component-name="Settings"
+      data-component-content="%7B%22className%22%3A%22h-4%20w-4%22%7D">
+      <path
+        d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z">
+      </path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+  </button>
+
   <div class="container">
     <div class="header">
       <div class="logo">
         <img src="vanta-logo-cropped.png" alt="Halonex Vanta Logo" />
       </div>
     </div>
-    
+
     <div class="status-card">
       <!-- Protection Toggle -->
       <div class="protection-toggle">
@@ -799,50 +634,28 @@
             example.com
           </div>
         </div>
-        
-        
+
+
       </div>
 
-     
+
     </div>
-    
-    <div class="actions">
-      <button class="button whitelist" id="whitelist-btn">
-        <div class="button-content">
-          <div class="button-icon">🛡️</div>
-          <div class="button-text">
-            <div class="button-title">Whitelist</div>
-          </div>
-        </div>
-      </button>
-      
-      <button class="button settings" id="settings-btn">
-        <div class="button-content">
-          <div class="button-icon">⚙️</div>
-          <div class="button-text">
-            <div class="button-title">Settings</div>
-          </div>
-        </div>
-      </button>
-    </div>
-    
+
     <div class="footer">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <div class="footer-logo">🛡️</div>
-          <div class="footer-text">
-            <div class="footer-tagline">SECURING TOMORROW TODAY</div>
-            <div class="footer-version">Halonex Vanta v1.0</div>
-          </div>
-        </div>
+      <div class="footer-minimal">
+        <span class="footer-brand">
+          <img src="favicon-32x32.png" alt="Vanta" class="footer-icon">
+          HALONEX VANTA
+        </span>
         <div class="footer-status">
-          <div class="status-indicator active"></div>
-          <span class="status-text">ACTIVE</span>
+          <div class="status-dot active"></div>
+          <span class="status-label">ACTIVE</span>
         </div>
       </div>
     </div>
   </div>
-  
+
   <script src="popup.js"></script>
 </body>
+
 </html>
