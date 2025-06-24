@@ -1,6 +1,55 @@
 // Background script for Halonex Vanta Chrome Extension
 console.log('Halonex Vanta background script loaded');
 
+// YARA integration for Chrome extension
+let yaraEngine = null;
+let yaraInitialized = false;
+
+// Initialize YARA engine
+async function initializeYaraEngine() {
+  if (yaraInitialized) return yaraEngine;
+  
+  try {
+    // Dynamic import of YARA module
+    const yaraModule = await import('./yara-wasm.js');
+    yaraEngine = yaraModule;
+    await yaraModule.initializeYara();
+    yaraInitialized = true;
+    console.log('✅ YARA engine initialized in background script');
+    return yaraEngine;
+  } catch (error) {
+    console.error('❌ Failed to initialize YARA engine:', error);
+    yaraInitialized = false;
+    return null;
+  }
+}
+
+// Scan content with YARA
+async function scanWithYara(data, fileName = 'unknown') {
+  try {
+    if (!yaraInitialized) {
+      await initializeYaraEngine();
+    }
+    
+    if (!yaraEngine) {
+      console.warn('YARA engine not available, skipping scan');
+      return { threat: false, reason: 'YARA not available' };
+    }
+    
+    const result = await yaraEngine.scanChromeExtensionContent(data, { fileName });
+    
+    if (result.summary.rules_matched > 0) {
+      console.warn(`⚠️ YARA detected ${result.summary.rules_matched} threats in ${fileName}`);
+      return { threat: true, results: result };
+    }
+    
+    return { threat: false, results: result };
+  } catch (error) {
+    console.error('Error during YARA scan:', error);
+    return { threat: false, error: error.message };
+  }
+}
+
 // Store blocked attempts counter and protection state
 let blockedAttempts = 0;
 let blockedToday = 0;

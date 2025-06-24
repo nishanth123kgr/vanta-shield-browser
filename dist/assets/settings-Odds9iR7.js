@@ -1,0 +1,1 @@
+import{Q as t,o as s,j as e,p as r,k as o,T as i,l as n,m as a}from"./index-Kg1sDc_h.js";import{a as c}from"./Settings-BPz-Z5CZ.js";const l=new t,d=()=>e.jsx(o,{client:l,children:e.jsxs(i,{children:[e.jsx(n,{}),e.jsx(a,{}),e.jsx(c,{})]})});s.createRoot(document.getElementById("root")).render(e.jsx(r.StrictMode,{children:e.jsx(d,{})}));

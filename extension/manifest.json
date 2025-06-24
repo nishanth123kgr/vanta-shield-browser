@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "Halonex Vanta",
+  "version": "1.0.0",
+  "description": "Advanced browser protection against malicious websites and threats",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "scripting",
+    "downloads"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "pages/popup.html",
+    "default_title": "Halonex Vanta",
+    "default_icon": {
+      "16": "icons/favicon-16x16.png",
+      "32": "icons/favicon-32x32.png",
+      "48": "icons/android-chrome-192x192.png",
+      "128": "icons/android-chrome-192x192.png"
+    }
+  },
+  "icons": {
+    "16": "icons/favicon-16x16.png",
+    "32": "icons/favicon-32x32.png",
+    "48": "icons/android-chrome-192x192.png",
+    "128": "icons/android-chrome-192x192.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "pages/index.html",
+        "pages/index-standalone.html",
+        "pages/settings-standalone.html",
+        "utils/yara-wasm.js",
+        "assets/rules.yar",
+        "assets/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "options_page": "pages/settings-standalone.html"
+}

@@ -8,7 +8,8 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "build:extension": "vite build && npm run copy-extension-files",
-    "copy-extension-files": "cp public/manifest.json dist/ && cp public/background.js dist/ && cp public/content.js dist/ && cp public/popup.html dist/ && cp public/popup.js dist/ && cp public/settings.html dist/ && cp public/settings.js dist/ && cp public/vanta-logo.png dist/ && cp dist/settings-standalone.html dist/settings-react.html",
+    "copy-extension-files": "cp public/manifest.json dist/ && cp public/background.js dist/ && cp public/content.js dist/ && cp public/popup.html dist/ && cp public/popup.js dist/ && cp public/settings.html dist/ && cp public/settings.js dist/ && cp public/vanta-logo.png dist/ && cp yara-wasm.js dist/ && cp rules.yar dist/ && cp dist/settings-standalone.html dist/settings-react.html",
+    "test:yara": "node test-yara.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -49,6 +50,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
     "input-otp": "^1.2.4",
+    "libyara-wasm": "^1.2.1",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",

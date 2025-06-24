@@ -14,7 +14,8 @@
     "https://*/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
@@ -51,6 +52,8 @@
         "settings-standalone.html",
         "debug-whitelist.html",
         "debug-whitelist.js", 
+        "yara-wasm.js",
+        "rules.yar",
         "assets/*"
       ],
       "matches": [
